@@ -1,8 +1,6 @@
 'use strict';
 
-const VIA_VERSION = '1.0.6';
-const VIA_NAME = 'VGG Image Annotator';
-const VIA_SHORT_NAME = 'VIA';
+/* VIA REGION 모양 */
 const VIA_REGION_SHAPE = { RECT: 'rect', CIRCLE: 'circle', ELLIPSE: 'ellipse', POLYGON: 'polygon', POINT: 'point', POLYLINE: 'polyline' };
 
 const VIA_REGION_EDGE_TOL = 20; // pixel
@@ -116,7 +114,6 @@ let _via_loaded_img_fn_list_table_html = [];
 // UI html elements
 let invisible_file_input = document.getElementById('invisible_file_input');
 let display_area = document.getElementById('display_area');
-let ui_top_panel = document.getElementById('ui_top_panel');
 let canvas_panel = document.getElementById('canvas_panel');
 
 let annotation_list_snippet = document.getElementById('annotation_list_snippet');
@@ -156,8 +153,6 @@ function ImageRegion() {
 // Initialization routine
 //
 function _via_init() {
-    console.log(VIA_NAME);
-    show_message(VIA_NAME + ' (' + VIA_SHORT_NAME + ') version ' + VIA_VERSION + '. Ready !', 2 * VIA_THEME_MESSAGE_TIMEOUT_MS);
     show_home_panel();
     init_leftsidebar_accordion();
 
@@ -184,8 +179,7 @@ function show_home_panel() {
         show_all_canvas();
         set_all_text_panel_display('none');
     } else {
-        var start_info =
-            '<p><a title="Load or Add Images" style="cursor: pointer; color: blue;" onclick="sel_local_images()">Load images</a> to start annotation or, see <a title="Getting started with VGG Image Annotator" style="cursor: pointer; color: blue;" onclick="show_getting_started_panel()">Getting Started</a>.</p>';
+        var start_info = '<p><a title="이미지로드" onclick="sel_local_images()">이미지 로드하기</a></p>';
         clear_image_display_area();
         document.getElementById('via_start_info_panel').innerHTML = start_info;
         document.getElementById('via_start_info_panel').style.display = 'block';
@@ -241,21 +235,6 @@ function import_attributes() {
     } else {
         show_message('Please load some images first');
     }
-}
-function show_about_panel() {
-    set_all_text_panel_display('none');
-    document.getElementById('about_panel').style.display = 'block';
-    canvas_panel.style.display = 'none';
-}
-function show_getting_started_panel() {
-    set_all_text_panel_display('none');
-    document.getElementById('getting_started_panel').style.display = 'block';
-    canvas_panel.style.display = 'none';
-}
-function show_license_panel() {
-    set_all_text_panel_display('none');
-    document.getElementById('license_panel').style.display = 'block';
-    canvas_panel.style.display = 'none';
 }
 function set_all_text_panel_display(style_display) {
     var tp = document.getElementsByClassName('text_panel');
@@ -337,7 +316,6 @@ function import_region_attributes_from_file(event) {
             case 'text/csv':
                 load_text_file(file, import_region_attributes_from_csv);
                 break;
-
             default:
                 show_message('Region attributes cannot be imported from file of type ' + file.type);
                 break;
@@ -934,7 +912,7 @@ function show_image(image_index) {
                 // based on the current dimension of browser window
                 var de = document.documentElement;
                 var canvas_panel_width = de.clientWidth - 230;
-                var canvas_panel_height = de.clientHeight - 2 * ui_top_panel.offsetHeight;
+                var canvas_panel_height = de.clientHeight;
                 _via_canvas_width = _via_current_image_width;
                 _via_canvas_height = _via_current_image_height;
                 if (_via_canvas_width > canvas_panel_width) {
@@ -2862,12 +2840,6 @@ _via_reg_canvas.addEventListener('keydown', function (e) {
         e.preventDefault();
         return;
     }
-    if (e.which === 32 && _via_current_image_loaded) {
-        // Space
-        toggle_img_list();
-        e.preventDefault();
-        return;
-    }
 
     // zoom
     if (_via_current_image_loaded) {
@@ -2939,12 +2911,6 @@ _via_reg_canvas.addEventListener('keydown', function (e) {
         return;
     }
 
-    if (e.which === 112) {
-        // F1 for help
-        show_getting_started_panel();
-        e.preventDefault();
-        return;
-    }
     if (e.which === 113) {
         // F2 for about
         show_about_panel();
@@ -3580,7 +3546,6 @@ function update_attributes_panel(type) {
         if (_via_is_file_attr_panel_visible) {
             update_file_attributes_input_panel();
         }
-        update_vertical_space();
     }
 }
 
@@ -3630,7 +3595,6 @@ function toggle_reg_attr_panel() {
             attributes_panel.style.display = 'block';
             attributes_panel.focus();
         }
-        update_vertical_space();
     } else {
         show_message('Please load some images first');
     }
@@ -3660,17 +3624,9 @@ function toggle_file_attr_panel() {
             _via_is_file_attr_panel_visible = true;
             attributes_panel.style.display = 'block';
         }
-        update_vertical_space();
     } else {
         show_message('Please load some images first');
     }
-}
-
-// this vertical spacer is needed to allow scrollbar to show
-// items like Keyboard Shortcut hidden under the attributes panel
-function update_vertical_space() {
-    var panel = document.getElementById('vertical_space');
-    panel.style.height = attributes_panel.offsetHeight + 'px';
 }
 
 function update_attribute_value(attr_id, value) {
@@ -3723,17 +3679,6 @@ function add_new_attribute(type, attribute_name) {
 function toggle_accordion_panel(e) {
     e.classList.toggle('active');
     e.nextElementSibling.classList.toggle('show');
-}
-
-function toggle_leftsidebar() {
-    var leftsidebar = document.getElementById('leftsidebar');
-    if (leftsidebar.style.display === 'none') {
-        leftsidebar.style.display = 'table-cell';
-        document.getElementById('leftsidebar_collapse_button').innerHTML = '&ltrif;';
-    } else {
-        leftsidebar.style.display = 'none';
-        document.getElementById('leftsidebar_collapse_button').innerHTML = '&rtrif;';
-    }
 }
 
 // source: https://www.w3schools.com/howto/howto_js_accordion.asp
@@ -3831,9 +3776,4 @@ function img_fn_list_scroll_to_current_file() {
             img_fn_list.scrollTop = sel_file.offsetTop;
         }
     }
-}
-
-function toggle_img_fn_list_visibility() {
-    document.getElementById('img_fn_list_panel').classList.toggle('show');
-    document.getElementById('loaded_img_panel_title').classList.toggle('active');
 }

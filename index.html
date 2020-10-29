@@ -8,12 +8,8 @@
     </head>
 
     <body onload="_via_init()" onresize="_via_update_ui_components()">
-        <svg
-            style="position: absolute; width: 0; height: 0; overflow: hidden"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-        >
+        <!-- 그리기 도구 형성 -->
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <symbol id="shape_rectangle">
                     <title>Rectangular region shape</title>
@@ -37,7 +33,6 @@
                 </symbol>
                 <symbol id="shape_polyline">
                     <title>Polyline region shape</title>
-                    <!--<path d="M 15.25,2.2372 3.625,11.6122 6,29.9872 l 20.75,-9.625" stroke-width="2"/>-->
                     <path d="M 2,12 10,24 18,12 24,18" stroke-width="2" />
                     <circle r="1" cx="2" cy="12" stroke-width="2" />
                     <circle r="1" cx="10" cy="24" stroke-width="2" />
@@ -46,84 +41,36 @@
                 </symbol>
             </defs>
         </svg>
+        <!--// 그리기 도구 형성 -->
 
-        <div class="top_panel" id="ui_top_panel">
-            <!-- Navigation menu -->
-            <div class="navbar">
-                <ul>
-                    <li><a onclick="show_home_panel()" title="Home">Home</a></li>
-                    <li class="dropdown">
-                        <a title="Image" class="drop_menu_item">Image &#9662;</a>
-                        <div class="dropdown-content">
-                            <a onclick="sel_local_images()" title="Load (or add) a set of images from local disk">Load or Add Images</a>
-                            <a onclick="toggle_img_fn_list_visibility()" title="Browse currently loaded images">List Images</a>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a title="Annotations" class="drop_menu_item">Annotation &#9662;</a>
-                        <div class="dropdown-content">
-                            <a onclick="show_annotation_data()" title="View annotations">View annotations</a>
-                            <a onclick="download_all_region_data('csv')" title="Save image region annotations as a CSV(comma separated value) file"
-                                >Save as CSV</a
-                            >
-                            <a onclick="download_all_region_data('json')" title="Save image region annotations as a JSON(Javascript Object Notation) file"
-                                >Save as JSON</a
-                            >
-                            <a onclick="sel_local_data_file('annotations')" title="Import existing region data from CSV or JSON file">Import</a>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a title="View" class="drop_menu_item">View &#9662;</a>
-                        <div class="dropdown-content">
-                            <a onclick="toggle_leftsidebar()" title="Show/hide left sidebar">Show/hide left sidebar</a>
-                            <a onclick="toggle_region_boundary_visibility()" title="Show or hide region boundaries">Show/hide region boundaries</a>
-                            <a onclick="toggle_region_id_visibility()" title="Show or hide region labels">Show/hide region labels</a>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a onclick="show_about_panel()" title="Help">Help &#9662;</a>
-                        <div class="dropdown-content">
-                            <a onclick="show_getting_started_panel()" title="Getting started with VGG Image Annotator (VIA)">Getting Started</a>
-                            <a onclick="show_license_panel()" title="VIA License">License</a>
-                            <a onclick="show_about_panel()" title="About VGG Image Annotator (VIA)">About</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <!-- end of #navbar -->
+        <!-- 함수명만 정리 -->
+        <!-- HOME : show_home_panel() -->
+        <!-- 이미지로드 : sel_local_images() -->
+        <!-- 객체 미리보기 : show_annotation_data() -->
+        <!-- csv 다운로드 : download_all_region_data('csv') -->
+        <!-- json 다운로드 :  download_all_region_data('json') -->
+        <!-- csv 또는 json 임포트하기 : sel_local_data_file('annotations') -->
+        <!-- regional 경계선 보이기/숨기기 :  toggle_region_boundary_visibility()-->
+        <!-- region_id 보이고 숨기기 :  toggle_region_id_visibility() -->
 
-            <!-- Shortcut toolbar -->
-            <div class="toolbar">
-                <ul>
-                    <!--
-          <li onclick="sel_local_images()" title="Load or Add Images">&ctdot;</li>
-          <li onclick="sel_local_data_file('annotations')" title="Import Annotations">&uarr;</li>
-          <li onclick="download_all_region_data('csv')" title="Save Annotations (as CSV)">&DownArrowBar;</li>
-          -->
+        <!-- 툴바 -->
+        <!-- 전 이미지 : move_to_prev_image()  -->
+        <!-- 다음 이미지 : move_to_next_image()  -->
+        <!-- 줌 아웃 : zoom_out() -->
+        <!-- 줌 인 : zoom_in() -->
+        <!-- 리셋 줌 레벨 : reset_zoom_level() -->
 
-                    <li id="toolbar_prev_img" style="margin-left: 1em" onclick="move_to_prev_image()" title="Previous Image">&larr;</li>
-                    <li id="toolbar_next_img" onclick="move_to_next_image()" title="Next Image">&rarr;</li>
-                    <li id="toolbar_list_img" onclick="toggle_img_list()" title="List Images">&#9776;</li>
+        <!-- 카피 셀렉트 리젼 : copy_sel_regions() -->
+        <!-- 붙여넣기 셀렉트 리젼 : paste_sel_regions() -->
+        <!-- 전체선택 셀렉트 리젼 : sel_all_regions() -->
+        <!-- 지우기 셀렉트 리젼 : del_sel_regions() -->
+        <!-- 보이지않는 파일 input -->
+        <input type="file" id="invisible_file_input" multiple name="files[]" />
 
-                    <li id="toolbar_zoom_out" style="margin-left: 2em" onclick="zoom_out()" title="Zoom Out">&minus;</li>
-                    <li id="toolbar_zoom_in" onclick="zoom_in()" title="Zoom In">&plus;</li>
-                    <li id="toolbar_zoom_reset" onclick="reset_zoom_level()" title="Zoom Reset">&equals;</li>
-
-                    <li id="toolbar_copy_region" style="margin-left: 2em" onclick="copy_sel_regions()" title="Copy Region">c</li>
-                    <li id="toolbar_paste_region" onclick="paste_sel_regions()" title="Paste Region">v</li>
-                    <li id="toolbar_sel_all_region" onclick="sel_all_regions()" title="Select All Regions">a</li>
-                    <li id="toolbar_del_region" onclick="del_sel_regions()" title="Delete Region">&times;</li>
-                </ul>
-            </div>
-            <!-- endof #toolbar -->
-            <input type="file" id="invisible_file_input" multiple name="files[]" style="display: none" />
-        </div>
-        <!-- endof #top_panel -->
-
-        <!-- Middle Panel contains a left-sidebar and image display areas -->
+        <!-- 메인 영역 -->
         <div class="middle_panel">
             <div id="leftsidebar">
-                <button class="leftsidebar_accordion active">Region Shape</button>
+                <button class="leftsidebar_accordion active">영역 모양</button>
                 <div class="leftsidebar_accordion_panel show">
                     <ul class="region_shape">
                         <li id="region_shape_rect" class="selected" onclick="select_region_shape('rect')" title="Rectangle">
@@ -147,175 +94,66 @@
                     </ul>
                 </div>
 
-                <button class="leftsidebar_accordion active" id="loaded_img_panel_title">Loaded Images</button>
+                <button class="leftsidebar_accordion active" id="loaded_img_panel_title">이미지 로드하기</button>
                 <div class="leftsidebar_accordion_panel show" id="img_fn_list_panel">
                     <div>
-                        <input type="text" placeholder="Filter using regular expression" oninput="img_fn_list_onregex()" id="img_fn_list_regex" />
+                        <input type="text" placeholder="이미지 파일명 찾기" oninput="img_fn_list_onregex()" id="img_fn_list_regex" />
                     </div>
                     <div id="img_fn_list"></div>
                 </div>
 
-                <button onclick="toggle_reg_attr_panel()" class="leftsidebar_accordion" id="reg_attr_panel_button">Region Attributes</button>
-                <button onclick="toggle_file_attr_panel()" class="leftsidebar_accordion" id="file_attr_panel_button">File Attributes</button>
+                <button onclick="toggle_reg_attr_panel()" class="leftsidebar_accordion" id="reg_attr_panel_button">영역 속성</button>
+                <button onclick="toggle_file_attr_panel()" class="leftsidebar_accordion" id="file_attr_panel_button">파일 속성</button>
 
-                <button class="leftsidebar_accordion">Keyboard Shortcuts</button>
+                <button class="leftsidebar_accordion">단축키</button>
                 <div class="leftsidebar_accordion_panel">
-                    <table style="padding: 2em 0em">
+                    <table>
                         <tr>
-                            <td style="width: 6em">n/p (&larr;/&rarr;)</td>
-                            <td>Next/Previous image</td>
+                            <td>n/p (&larr;/&rarr;)</td>
+                            <td>이후 / 이전 이미지</td>
                         </tr>
                         <tr>
                             <td>+&nbsp;/&nbsp;-&nbsp;/&nbsp;=</td>
-                            <td>Zoom in/out/reset</td>
+                            <td>확대/축소/초기화</td>
                         </tr>
                         <tr>
                             <td>Ctrl + c</td>
-                            <td>Copy sel. regions</td>
+                            <td>영역 복사</td>
                         </tr>
                         <tr>
                             <td>Ctrl + v</td>
-                            <td>Paste sel. regions</td>
+                            <td>영역 붙여넣기</td>
                         </tr>
                         <tr>
                             <td>Ctrl + a</td>
-                            <td>Select all regions</td>
+                            <td>전체 영역 선택하기</td>
                         </tr>
                         <tr>
                             <td>Del, Bkspc</td>
-                            <td>Delete image region</td>
+                            <td>이미지 영역 지우기</td>
                         </tr>
                         <tr>
                             <td>Esc</td>
-                            <td>Cancel operation</td>
+                            <td>동작 취소하기</td>
                         </tr>
                         <tr>
                             <td>Ctrl + s</td>
-                            <td>Download annotations</td>
-                        </tr>
-                        <tr>
-                            <td>Spacebar</td>
-                            <td>Toggle image list</td>
+                            <td>annotation 저장하기</td>
                         </tr>
                     </table>
                 </div>
             </div>
-            <!-- end of leftsidebar -->
-            <div id="leftsidebar_collapse_panel">
-                <div onclick="toggle_leftsidebar()" id="leftsidebar_collapse_button" title="Show/hide left toolbar">&ltrif;</div>
-            </div>
-
-            <!-- Main display area: contains image canvas, ... -->
+            <!-- Canvas 보여주는 영역 -->
             <div id="display_area">
                 <div id="canvas_panel">
                     <canvas id="image_canvas"></canvas>
-                    <canvas id="region_canvas" tabindex="1"
-                        >Sorry, your browser does not support HTML5 Canvas functionality which is required for this application.</canvas
-                    >
+                    <canvas id="region_canvas" tabindex="1">죄송하지만 브라우저를 업그레이드해주세요. Canvas는 크롬브라우저에서 최적화되어있습니다.</canvas>
                 </div>
-
                 <div>
-                    <div class="text_panel" id="via_start_info_panel">Starting VGG Image Annotator ...</div>
-
-                    <div class="text_panel" style="padding: 1em; border: 1px solid #cccccc" id="about_panel">
-                        <p style="font-size: 2em">VGG Image Annotator</p>
-                        <p style="font-size: 0.8em">version <a href="https://gitlab.com/vgg/via/blob/via-1.x.y/CHANGELOG">1.0.6</a></p>
-                        <p>
-                            VGG Image Annotator (VIA) is an <a href="https://gitlab.com/vgg/via/">open source project</a> developed at the
-                            <a href="http://www.robots.ox.ac.uk/~vgg/">Visual Geometry Group</a> and released under the BSD-2 clause
-                            <a href="https://gitlab.com/vgg/via/blob/master/LICENSE">license</a>. With this standalone application, you can define regions in an
-                            image and create a textual description of those regions. Such image regions and descriptions are useful for supervised training of
-                            learning algorithms.
-                        </p>
-                        <p>Features:</p>
-                        <ul>
-                            <li>based solely on HTML, CSS and Javascript (no external javascript libraries)</li>
-                            <li>can be used off-line (full application in a single html file of size &lt; 200KB)</li>
-                            <li>requires nothing more than a modern web browser</li>
-                            <li>supported region shapes: rectangle, circle, ellipse, polygon and point</li>
-                            <li>import/export of region data in csv and json file format</li>
-                        </ul>
-                        <p>
-                            For more details, visit <a href="http://www.robots.ox.ac.uk/~vgg/software/via/">http://www.robots.ox.ac.uk/~vgg/software/via/</a>.
-                        </p>
-                        <p>&nbsp;</p>
-                        <p>Copyright &copy; 2016-2018, <a href="mailto:adutta@robots.ox.ac.uk">Abhishek Dutta</a> (Visual Geometry Group, Oxford University)</p>
-                    </div>
-
-                    <div class="text_panel" id="getting_started_panel">
-                        <h1>Getting Started</h1>
-                        <ol>
-                            <li>Click [Image > Load or Add Images] in the top menu bar to load a set of images that you wish to annotate.</li>
-                            <li>
-                                Press n (or p) to navigate through the loaded images. You can also use the &larr; and &rarr; icons in the top panel toolbar for
-                                navigation.
-                            </li>
-                            <li>
-                                Click <b>Region Attributes</b> in the left panel to reveal a panel in the bottom. Click <b>[Add New]</b> tp add a new attribute.
-                                For example:
-                                <pre>
-                  object_name
-                  object_color
-                </pre
-                                >
-                                You can add more region attributes according to you needs.
-                            </li>
-
-                            <li>In the <b>Region Shape</b> section in the left panel, click the rectangular shape</li>
-                            <li>
-                                On the image area, keep pressing the right click button as you drag the mouse cursor. This will draw a rectangular region on the
-                                image.
-                            </li>
-                            <li>
-                                This newly created region is automatically selected. Now you can enter the attribute value for this region in the bottom panel.
-                                For example:
-                                <pre>
-                  object_name = dog
-                  object_color = white
-                </pre
-                                >
-                                You can annotate multiple regions in this image or other images and assign a value to each pre-defined attribute.
-                            </li>
-                            <li>
-                                To download the annotated region data, click <b>[Annotation > Save as CSV]</b> in the top menu bar. This will download a text
-                                file containing region shape and attribute data.
-                            </li>
-                            <li>
-                                Next time, you can start from the point your left by first loading the images and then importing the CSV file (downloaded in
-                                step 7) by clicking <b>[Annotation > Import]</b>.
-                            </li>
-                        </ol>
-                    </div>
-
-                    <div class="text_panel" id="license_panel">
-                        <pre>
-              Copyright (c) 2016-2018, Abhishek Dutta, Visual Geometry Group, Oxford University.
-              All rights reserved.
-
-              Redistribution and use in source and binary forms, with or without
-              modification, are permitted provided that the following conditions are met:
-
-              Redistributions of source code must retain the above copyright notice, this
-              list of conditions and the following disclaimer.
-              Redistributions in binary form must reproduce the above copyright notice,
-              this list of conditions and the following disclaimer in the documentation
-              and/or other materials provided with the distribution.
-              THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
-              AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-              IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-              ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-              LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-              CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-              SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-              INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-              CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-              ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-              POSSIBILITY OF SUCH DAMAGE.
-            </pre
-                        >
-                    </div>
+                    <div class="text_panel" id="via_start_info_panel">VGG Image Annotator 로딩중...</div>
                 </div>
             </div>
+            <!-- // Canvas 보여주는 영역 -->
         </div>
 
         <!-- region and file attributes input panel -->
@@ -326,12 +164,8 @@
             <table id="attributes_panel_table"></table>
         </div>
 
-        <!-- to show status messages -->
+        <!-- 상태 메시지 보여주기 -->
         <div id="message_panel"></div>
-
-        <!-- this vertical spacer is needed to allow scrollbar to show
-         items like Keyboard Shortcut hidden under the attributes panel -->
-        <div style="width: 100%" id="vertical_space"></div>
 
         <script src="./via.js"></script>
     </body>
