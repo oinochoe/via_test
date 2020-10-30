@@ -1,35 +1,5 @@
-body {
-    min-width: 800px;
-    padding: 0;
-    margin: 0;
-    font-family: sans-serif;
-}
+@charset "utf-8";
 
-/* Middle panel: containing #image_panel, #leftsidebar */
-.middle_panel {
-    position: relative;
-    display: table;
-    table-layout: fixed;
-    width: 100%;
-    z-index: 1;
-    padding: 0;
-    top: 3.5em;
-    /*padding-top: 1.0125em;  ensures the mouse event (x,y) coordinates are integer */
-}
-#leftsidebar {
-    display: table-cell;
-    width: 250px;
-    z-index: 10;
-    vertical-align: top;
-}
-#display_area {
-    display: table-cell;
-    width: 100%;
-    z-index: 1;
-    margin: 0;
-    padding-left: 1em;
-    vertical-align: top;
-}
 #canvas_panel {
     position: relative;
     margin: 0;
@@ -39,48 +9,8 @@ body {
     outline: none;
 }
 
-/* Left sidebar accordion */
-button.leftsidebar_accordion {
-    font-size: large;
-    background-color: #f2f2f2;
-    cursor: pointer;
-    padding: 0.5em 0.5em;
-    width: 100%;
-    text-align: left;
-    border: 0;
-    outline: none;
-}
-button.leftsidebar_accordion:focus {
-    outline: none;
-}
-button.leftsidebar_accordion.active,
-button.leftsidebar_accordion:hover {
-    background-color: #e6e6e6;
-}
-button.leftsidebar_accordion:after {
-    content: '\02795';
-    color: #4d4d4d;
-    float: right;
-}
-button.leftsidebar_accordion.active:after {
-    content: '\2796';
-}
-.leftsidebar_accordion_panel {
-    display: none;
-    padding-top: 0;
-    padding-left: 0.5em;
-    font-size: small;
-    border-right: 2px solid #f2f2f2;
-    border-bottom: 2px solid #f2f2f2;
-}
-.leftsidebar_accordion_panel.show {
-    display: block;
-}
-.leftsidebar_accordion_panel td:first-child {
-    width: 6em;
-}
 
-/* Region shape selection panel inside leftsidebar */
+/* Region shapes */
 ul.region_shape {
     font-size: xx-large;
     list-style-type: none;
@@ -104,7 +34,7 @@ ul.region_shape .selected {
     stroke: #ff0000;
 }
 
-/* Loaded image list shown in leftsidebar panel */
+/* img_fn_list */
 #img_fn_list {
     font-size: small;
     overflow: scroll;
@@ -133,6 +63,7 @@ ul.region_shape .selected {
     cursor: pointer;
 }
 
+/* 하단 메시지 노출 */
 #message_panel {
     position: fixed;
     left: 0;
@@ -179,7 +110,7 @@ ul.region_shape .selected {
     color: red;
 }
 
-/* region and file attributes input panel (spreadsheet like) */
+/* region & file input 패널 */
 #attributes_panel {
     display: none;
     position: fixed;
@@ -287,7 +218,15 @@ ul.region_shape .selected {
     left: 0px;
     z-index: 2;
 }
-/* Loading spinbar */
+
+
+
+
+
+
+/* 정리 */
+
+/* 로딩 스피너는 다른걸로 바꿀 예정 */
 .loading_spinbox {
     display: inline-block;
     border: 0.4em solid #cccccc;

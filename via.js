@@ -30,6 +30,13 @@ const VIA_CSV_QUOTE_CHAR = '"';
 const VIA_CSV_KEYVAL_SEP = ':';
 const VIA_IMPORT_CSV_COMMENT_CHAR = '#';
 
+const BBOX_LINE_WIDTH = 4;
+const BBOX_SELECTED_OPACITY = 0.3;
+const BBOX_BOUNDARY_FILL_COLOR_ANNOTATED = '#f2f2f2';
+const BBOX_BOUNDARY_FILL_COLOR_NEW = '#aaeeff';
+const BBOX_BOUNDARY_LINE_COLOR = '#1a1a1a';
+const BBOX_SELECTED_FILL_COLOR = '#ffffff';
+
 let _via_img_metadata = {}; // data structure to store loaded images metadata
 let _via_img_count = 0; // count of the loaded images
 let _via_canvas_regions = []; // image regions spec. in canvas space
@@ -113,23 +120,13 @@ let _via_loaded_img_fn_list_table_html = [];
 
 // UI html elements
 let invisible_file_input = document.getElementById('invisible_file_input');
-let display_area = document.getElementById('display_area');
 let canvas_panel = document.getElementById('canvas_panel');
 
 let annotation_list_snippet = document.getElementById('annotation_list_snippet');
 let annotation_textarea = document.getElementById('annotation_textarea');
 
-let img_fn_list_panel = document.getElementById('img_fn_list_panel');
-let img_fn_list = document.getElementById('img_fn_list');
 let attributes_panel = document.getElementById('attributes_panel');
 let annotation_data_window;
-
-const BBOX_LINE_WIDTH = 4;
-const BBOX_SELECTED_OPACITY = 0.3;
-const BBOX_BOUNDARY_FILL_COLOR_ANNOTATED = '#f2f2f2';
-const BBOX_BOUNDARY_FILL_COLOR_NEW = '#aaeeff';
-const BBOX_BOUNDARY_LINE_COLOR = '#1a1a1a';
-const BBOX_SELECTED_FILL_COLOR = '#ffffff';
 
 //
 // Data structure for annotations
@@ -154,7 +151,6 @@ function ImageRegion() {
 //
 function _via_init() {
     show_home_panel();
-    init_leftsidebar_accordion();
 
     _via_is_local_storage_available = check_local_storage();
     if (_via_is_local_storage_available) {
@@ -3681,37 +3677,13 @@ function toggle_accordion_panel(e) {
     e.nextElementSibling.classList.toggle('show');
 }
 
-// source: https://www.w3schools.com/howto/howto_js_accordion.asp
-function init_leftsidebar_accordion() {
-    var acc = document.getElementsByClassName('leftsidebar_accordion');
-    var i;
-    for (i = 0; i < acc.length; ++i) {
-        if (acc[i].id !== 'reg_attr_panel_button' && acc[i].id !== 'file_attr_panel_button') {
-            acc[i].addEventListener('click', function () {
-                this.classList.toggle('active');
-                var panel = this.nextElementSibling;
-                if (panel.classList.contains('show')) {
-                    panel.classList.remove('show');
-                } else {
-                    panel.classList.add('show');
-                }
-            });
-        }
-    }
-}
-
-function is_img_fn_list_visible() {
-    return img_fn_list_panel.classList.contains('show');
-}
-
+// 로딩 스피너 다른걸로 바꾸자..
 function img_loading_spinbar(show) {
-    if (is_img_fn_list_visible()) {
-        var panel = document.getElementById('loaded_img_panel_title');
-        if (show) {
-            panel.innerHTML = 'Loaded Images &nbsp;&nbsp;<div class="loading_spinbox"></div>';
-        } else {
-            panel.innerHTML = 'Loaded Images &nbsp;&nbsp;';
-        }
+    var panel = document.getElementById('loaded_img_panel_title');
+    if (show) {
+        panel.innerHTML = 'Loaded Images &nbsp;&nbsp;<div class="loading_spinbox"></div>';
+    } else {
+        panel.innerHTML = 'Loaded Images &nbsp;&nbsp;';
     }
 }
 
