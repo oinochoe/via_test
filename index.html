@@ -12,27 +12,27 @@
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <symbol id="shape_rectangle">
-                    <title>Rectangular region shape</title>
+                    <title>Rectangular(사각형)</title>
                     <rect width="20" height="12" x="6" y="10" stroke-width="2" />
                 </symbol>
                 <symbol id="shape_circle">
-                    <title>Circular region shape</title>
+                    <title>Circular(원형)</title>
                     <circle r="10" cx="16" cy="16" stroke-width="2" />
                 </symbol>
                 <symbol id="shape_ellipse">
-                    <title>Elliptical region shape</title>
+                    <title>Elliptical(타원형)</title>
                     <ellipse rx="12" ry="8" cx="16" cy="16" stroke-width="2" />
                 </symbol>
                 <symbol id="shape_polygon">
-                    <title>Polygon region shape</title>
+                    <title>Polygon(다각형)</title>
                     <path d="M 15.25,2.2372 3.625,11.6122 6,29.9872 l 20.75,-9.625 2.375,-14.75 z" stroke-width="2" />
                 </symbol>
                 <symbol id="shape_point">
-                    <title>Point region shape</title>
+                    <title>Point(점)</title>
                     <circle r="3" cx="16" cy="16" stroke-width="2" />
                 </symbol>
                 <symbol id="shape_polyline">
-                    <title>Polyline region shape</title>
+                    <title>Polyline(점라인)</title>
                     <path d="M 2,12 10,24 18,12 24,18" stroke-width="2" />
                     <circle r="1" cx="2" cy="12" stroke-width="2" />
                     <circle r="1" cx="10" cy="24" stroke-width="2" />
@@ -70,31 +70,30 @@
         <!-- 메인 영역 -->
         <div class="middle_panel">
             <div id="leftsidebar">
-                <button class="leftsidebar_accordion active">영역 모양</button>
                 <div class="leftsidebar_accordion_panel show">
                     <ul class="region_shape">
-                        <li id="region_shape_rect" class="selected" onclick="select_region_shape('rect')" title="Rectangle">
+                        <li id="region_shape_rect" class="selected" onclick="select_region_shape('rect')" title="사각형">
                             <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_rectangle"></use></svg>
                         </li>
-                        <li id="region_shape_circle" onclick="select_region_shape('circle')" title="Circle">
+                        <li id="region_shape_circle" onclick="select_region_shape('circle')" title="원형">
                             <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_circle"></use></svg>
                         </li>
-                        <li id="region_shape_ellipse" onclick="select_region_shape('ellipse')" title="Ellipse">
+                        <li id="region_shape_ellipse" onclick="select_region_shape('ellipse')" title="타원형">
                             <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_ellipse"></use></svg>
                         </li>
-                        <li id="region_shape_polygon" onclick="select_region_shape('polygon')" title="Polygon">
+                        <li id="region_shape_polygon" onclick="select_region_shape('polygon')" title="다각형">
                             <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_polygon"></use></svg>
                         </li>
-                        <li id="region_shape_point" onclick="select_region_shape('point')" title="Point">
+                        <li id="region_shape_point" onclick="select_region_shape('point')" title="점">
                             <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_point"></use></svg>
                         </li>
-                        <li id="region_shape_polyline" onclick="select_region_shape('polyline')" title="Polyline">
+                        <li id="region_shape_polyline" onclick="select_region_shape('polyline')" title="점라인">
                             <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_polyline"></use></svg>
                         </li>
                     </ul>
                 </div>
 
-                <button class="leftsidebar_accordion active" id="loaded_img_panel_title">이미지 로드하기</button>
+                <span id="loaded_img_panel_title">로드된 이미지</span>
                 <div class="leftsidebar_accordion_panel show" id="img_fn_list_panel">
                     <div>
                         <input type="text" placeholder="이미지 파일명 찾기" oninput="img_fn_list_onregex()" id="img_fn_list_regex" />
@@ -105,7 +104,6 @@
                 <button onclick="toggle_reg_attr_panel()" class="leftsidebar_accordion" id="reg_attr_panel_button">영역 속성</button>
                 <button onclick="toggle_file_attr_panel()" class="leftsidebar_accordion" id="file_attr_panel_button">파일 속성</button>
 
-                <button class="leftsidebar_accordion">단축키</button>
                 <div class="leftsidebar_accordion_panel">
                     <table>
                         <tr>

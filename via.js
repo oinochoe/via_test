@@ -197,7 +197,7 @@ function download_all_region_data(type) {
     var all_region_data_blob = new Blob(all_region_data, blob_attr);
 
     if (all_region_data_blob.size > 2 * 1024 * 1024 && type === 'csv') {
-        show_message('CSV file size is ' + all_region_data_blob.size / (1024 * 1024) + ' MB. We advise you to instead download as JSON');
+        show_message(all_region_data_blob.size / (1024 * 1024) + 'MB의 CSV 파일사이즈.. JSON으로 다운로드하는 것을 추천드립니다.');
     } else {
         save_data_to_local_file(all_region_data_blob, 'via_region_data.' + type);
     }
@@ -229,7 +229,7 @@ function import_attributes() {
             invisible_file_input.click();
         }
     } else {
-        show_message('Please load some images first');
+        show_message('이미지를 먼저 로드하세요.');
     }
 }
 function set_all_text_panel_display(style_display) {
@@ -265,10 +265,10 @@ function store_local_img_ref(event) {
 
             if (_via_img_metadata.hasOwnProperty(img_id)) {
                 if (_via_img_metadata[img_id].fileref) {
-                    show_message('Image ' + filename + ' already loaded. Skipping!');
+                    show_message(filename + ' 이미지가 이미지 로드되었습니다. 스킵하세요.');
                 } else {
                     _via_img_metadata[img_id].fileref = user_selected_images[i];
-                    show_message('Regions already exist for file ' + filename + ' !');
+                    show_message(filename + '파일 영역이 이미 설정되어있습니다.');
                 }
             } else {
                 _via_img_metadata[img_id] = new ImageMetadata(user_selected_images[i], filename, size);
@@ -285,7 +285,7 @@ function store_local_img_ref(event) {
     if (_via_img_metadata) {
         var status_msg = 'Loaded ' + (_via_img_count - original_image_count) + ' images.';
         if (discarded_file_count) {
-            status_msg += ' ( Discarded ' + discarded_file_count + ' non-image files! )';
+            status_msg += ' (이미지 파일이 아닌' + discarded_file_count + '개의 파일 삭제됨)';
         }
         show_message(status_msg);
 
@@ -296,7 +296,7 @@ function store_local_img_ref(event) {
         }
         update_img_fn_list();
     } else {
-        show_message('Please upload some image files!');
+        show_message('이미지 파일을 업로드 해 주세요.');
     }
 }
 
@@ -313,7 +313,7 @@ function import_region_attributes_from_file(event) {
                 load_text_file(file, import_region_attributes_from_csv);
                 break;
             default:
-                show_message('Region attributes cannot be imported from file of type ' + file.type);
+                show_message(file.type + ' 파일에서 영역 속성을 불러낼 수 없습니다.');
                 break;
         }
     }
@@ -331,7 +331,7 @@ function import_region_attributes_from_csv(data) {
     }
 
     _via_reload_img_fn_list_table = true;
-    show_message('Imported ' + attributes_import_count + ' attributes from CSV file');
+    show_message(attributes_import_count + ' 개의 속성이 csv 파일로부터 불러내짐');
     save_current_data_to_browser_cache();
 }
 
@@ -359,13 +359,13 @@ function import_annotations_from_file(event) {
         }
     }
 }
+
+// csv에서 불러오기
 function import_annotations_from_csv(data) {
     if (data === '' || typeof data === 'undefined') {
         return;
     }
 
-    // csv header format
-    // #filename,file_size,file_attributes,region_count,region_id,region_shape_attributes,region_attributes
     var filename_index = 0;
     var size_index = 1;
     var file_attr_index = 2;
@@ -380,7 +380,7 @@ function import_annotations_from_csv(data) {
     var csvdata = data.split(line_split_regex);
 
     for (var i = 0; i < csvdata.length; ++i) {
-        // ignore blank lines
+        // csv 파일내에서 공백 무시하기
         if (csvdata[i].charAt(0) === '\n' || csvdata[i].charAt(0) === '') {
             continue;
         }
@@ -480,7 +480,7 @@ function import_annotations_from_csv(data) {
             }
         }
     }
-    show_message('Import Summary : [' + region_import_count + '] regions, ' + '[' + malformed_csv_lines_count + '] malformed csv lines.');
+    show_message('에러 : [' + region_import_count + '] 개의 영역, ' + '[' + malformed_csv_lines_count + '] 개의 csv 라인');
 
     _via_reload_img_fn_list_table = true;
     show_image(_via_image_index);
@@ -530,7 +530,7 @@ function import_annotations_from_json(data) {
             }
         }
     }
-    show_message('Import Summary : [' + region_import_count + '] regions');
+    show_message('[' + region_import_count + '] 개의 영역');
 
     _via_reload_img_fn_list_table = true;
     show_image(_via_image_index);
@@ -674,7 +674,7 @@ function load_text_file(text_file, callback_function) {
         text_reader.addEventListener(
             'progress',
             function (e) {
-                show_message('Loading data from text file : ' + text_file.name + ' ... ');
+                show_message('텍스트 파일에서 로딩중 : ' + text_file.name + ' ... ');
             },
             false,
         );
@@ -682,7 +682,7 @@ function load_text_file(text_file, callback_function) {
         text_reader.addEventListener(
             'error',
             function () {
-                show_message('Error loading data from text file :  ' + text_file.name + ' !');
+                show_message('텍스트 파일에서 에러 :  ' + text_file.name + ' !');
                 callback_function('');
             },
             false,
@@ -843,7 +843,7 @@ function show_image(image_index) {
         function () {
             _via_is_loading_current_image = false;
             img_loading_spinbar(false);
-            show_message('Error loading image ' + img_filename + ' !');
+            show_message('이미지 로딩 에러 : ' + img_filename + ' !');
         },
         false,
     );
@@ -853,7 +853,7 @@ function show_image(image_index) {
         function () {
             _via_is_loading_current_image = false;
             img_loading_spinbar(false);
-            show_message('Aborted loading image ' + img_filename + ' !');
+            show_message('이미지 로딩 취소 : ' + img_filename + ' !');
         },
         false,
     );
@@ -868,7 +868,7 @@ function show_image(image_index) {
                 function () {
                     _via_is_loading_current_image = false;
                     img_loading_spinbar(false);
-                    show_message('Error loading image ' + img_filename + ' !');
+                    show_message('이미지 로딩 에러 :  ' + img_filename + ' !');
                 },
                 false,
             );
@@ -878,7 +878,7 @@ function show_image(image_index) {
                 function () {
                     _via_is_loading_current_image = false;
                     img_loading_spinbar(false);
-                    show_message('Aborted loading image ' + img_filename + ' !');
+                    show_message('이미지 로딩 취소 : ' + img_filename + ' !');
                 },
                 false,
             );
@@ -1047,7 +1047,7 @@ function select_region_shape(sel_shape_name) {
         case VIA_REGION_SHAPE.RECT: // Fall-through
         case VIA_REGION_SHAPE.CIRCLE: // Fall-through
         case VIA_REGION_SHAPE.ELLIPSE:
-            show_message('Press single click and drag mouse to draw ' + _via_current_shape + ' region');
+            show_message('한번 클릭해서 드래그해서 영역을 그리세요 :  ' + _via_current_shape);
             break;
 
         case VIA_REGION_SHAPE.POLYLINE:
@@ -1055,15 +1055,15 @@ function select_region_shape(sel_shape_name) {
             _via_is_user_drawing_polygon = false;
             _via_current_polygon_region_id = -1;
 
-            show_message('[Enter] to finish, [Esc] to cancel, ' + '[Click] to define polygon/polyline vertices');
+            show_message('다각형, 다각형라인을 완성하기 위해서 [Enter]를 눌러서 끝내기, [Esc]를 눌러서 취소하기.');
             break;
 
         case VIA_REGION_SHAPE.POINT:
-            show_message('Press single click to define points (or landmarks)');
+            show_message('클릭해서 점을 연결하세요.');
             break;
 
         default:
-            show_message('Unknown shape selected!');
+            show_message('잘못된 모양이 선택됨!');
             break;
     }
 }
@@ -1668,7 +1668,7 @@ _via_reg_canvas.addEventListener('mouseup', function (e) {
                     break;
             }
         } else {
-            show_message('Prevented accidental addition of a very small region.');
+            show_message('너무 작은 영역을 추가하는 것을 방지하였음.');
         }
         update_attributes_panel();
         _via_redraw_reg_canvas();
@@ -2752,7 +2752,7 @@ function rect_update_corner(corner_id, d, x, y, preserve_aspect_ratio) {
 
 function _via_update_ui_components() {
     if (!_via_is_window_resized && _via_current_image_loaded) {
-        show_message('Resizing window ...');
+        show_message('리사이징 ...');
         set_all_text_panel_display('none');
         show_all_canvas();
 
@@ -2921,11 +2921,11 @@ _via_reg_canvas.addEventListener('keydown', function (e) {
 
             var npts = _via_canvas_regions[_via_current_polygon_region_id].shape_attributes['all_points_x'].length;
             if (npts <= 2 && _via_current_shape === VIA_REGION_SHAPE.POLYGON) {
-                show_message('For a polygon, you must define at least 3 points. ' + 'Press [Esc] to cancel drawing operation.!');
+                show_message('다각형을 그리기 위해 최소한 3개의 점선을 이어야합니다. ' + '[Esc]를 눌러 각 단계를 취소할 수 있습니다.');
                 return;
             }
             if (npts <= 1 && _via_current_shape === VIA_REGION_SHAPE.POLYLINE) {
-                show_message('A polyline must have at least 2 points. ' + 'Press [Esc] to cancel drawing operation.!');
+                show_message('다각형선을 그리기 위해서는 최소한 2개의 선을 그려야합니다. ' + '[Esc]를 눌러 각 단계를 취소할 수 있습니다.');
                 return;
             }
 
@@ -2983,7 +2983,7 @@ function add_new_polygon() {
 
 function del_sel_regions() {
     if (!_via_current_image_loaded) {
-        show_message('First load some images!');
+        show_message('먼저 이미지를 로드하세요!');
         return;
     }
 
@@ -3023,12 +3023,12 @@ function del_sel_regions() {
     update_attributes_panel();
     save_current_data_to_browser_cache();
 
-    show_message('Deleted ' + del_region_count + ' selected regions');
+    show_message('선택 된' + del_region_count + '개의 영역이 삭제됨');
 }
 
 function sel_all_regions() {
     if (!_via_current_image_loaded) {
-        show_message('First load some images!');
+        show_message('먼저 이미지를 로드하세요!');
         return;
     }
 
@@ -3039,7 +3039,7 @@ function sel_all_regions() {
 
 function copy_sel_regions() {
     if (!_via_current_image_loaded) {
-        show_message('First load some images!');
+        show_message('먼저 이미지를 로드하세요!');
         return;
     }
 
@@ -3052,15 +3052,15 @@ function copy_sel_regions() {
                 _via_copied_image_regions.push(clone_image_region(img_region));
             }
         }
-        show_message('Copied ' + _via_copied_image_regions.length + ' selected regions. Press Ctrl + v to paste');
+        show_message(_via_copied_image_regions.length + '개의 선택된 영역이 복사됨. Ctrl + v 로 붙여넣으세요');
     } else {
-        show_message('Select a region first!');
+        show_message('영역을 먼저 선택하세요!');
     }
 }
 
 function paste_sel_regions() {
     if (!_via_current_image_loaded) {
-        show_message('First load some images!');
+        show_message('먼저 이미지를 로드하세요!');
         return;
     }
 
@@ -3078,11 +3078,11 @@ function paste_sel_regions() {
         }
         _via_load_canvas_regions();
         var discarded_reg_count = _via_copied_image_regions.length - pasted_reg_count;
-        show_message('Pasted ' + pasted_reg_count + ' regions. ' + 'Discarded ' + discarded_reg_count + ' regions exceeding image boundary.');
+        show_message(pasted_reg_count + '개의 영역이 붙여넣어짐. 초과된' + discarded_reg_count + '개의 영역이 취소됨.');
         _via_redraw_reg_canvas();
         _via_reg_canvas.focus();
     } else {
-        show_message('To paste a region, you first need to select a region and copy it!');
+        show_message('붙여넣기 위해서는 먼저 영역을 선택하고 Crtl + c를 눌러 복사하세요.');
     }
 }
 
@@ -3142,7 +3142,7 @@ function move_to_next_image() {
 
 function reset_zoom_level() {
     if (!_via_current_image_loaded) {
-        show_message('First load some images!');
+        show_message('먼저 이미지를 로드하세요!');
         return;
     }
     if (_via_is_canvas_zoomed) {
@@ -3158,20 +3158,20 @@ function reset_zoom_level() {
         _via_redraw_img_canvas();
         _via_redraw_reg_canvas();
         _via_reg_canvas.focus();
-        show_message('Zoom reset');
+        show_message('확대/축소 원래대로');
     } else {
-        show_message('Cannot reset zoom because image zoom has not been applied!');
+        show_message('이미지 확대/축소가 적용되어있지 않아 확대/축소를 원래대로 할 수 없습니다!');
     }
 }
 
 function zoom_in() {
     if (!_via_current_image_loaded) {
-        show_message('First load some images!');
+        show_message('먼저 이미지를 로드하세요!');
         return;
     }
 
     if (_via_canvas_zoom_level_index === VIA_CANVAS_ZOOM_LEVELS.length - 1) {
-        show_message('Further zoom-in not possible');
+        show_message('더 이상 확대할 수 없습니다.');
     } else {
         _via_canvas_zoom_level_index += 1;
 
@@ -3185,18 +3185,18 @@ function zoom_in() {
         _via_redraw_img_canvas();
         _via_redraw_reg_canvas();
         _via_reg_canvas.focus();
-        show_message('Zoomed in to level ' + zoom_scale + 'X');
+        show_message('확대배율 : ' + zoom_scale + 'X');
     }
 }
 
 function zoom_out() {
     if (!_via_current_image_loaded) {
-        show_message('First load some images!');
+        show_message('먼저 이미지를 로드하세요!');
         return;
     }
 
     if (_via_canvas_zoom_level_index === 0) {
-        show_message('Further zoom-out not possible');
+        show_message('더 이상 축소할 수 없습니다.');
     } else {
         _via_canvas_zoom_level_index -= 1;
 
@@ -3210,7 +3210,7 @@ function zoom_out() {
         _via_redraw_img_canvas();
         _via_redraw_reg_canvas();
         _via_reg_canvas.focus();
-        show_message('Zoomed out to level ' + zoom_scale + 'X');
+        show_message('축소배율 : ' + zoom_scale + 'X');
     }
 }
 
@@ -3279,9 +3279,9 @@ function save_current_data_to_browser_cache() {
             } catch (err) {
                 _via_is_save_ongoing = false;
                 _via_is_local_storage_available = false;
-                show_message('Failed to save annotation data to browser cache.');
-                alert('Failed to save annotation data to browser cache.');
-                console.log('Failed to save annotation data to browser cache');
+                show_message('캐시된 데이터를 불러오지 못하였습니다.');
+                alert('캐시된 데이터를 불러오지 못하였습니다.');
+                console.log('캐시데이터로 저장하지 못하였습니다.');
                 console.log(err.message);
             }
         }
@@ -3585,7 +3585,7 @@ function toggle_reg_attr_panel() {
             attributes_panel.focus();
         }
     } else {
-        show_message('Please load some images first');
+        show_message('먼저 이미지를 로드하세요!');
     }
 }
 
@@ -3614,7 +3614,7 @@ function toggle_file_attr_panel() {
             attributes_panel.style.display = 'block';
         }
     } else {
-        show_message('Please load some images first');
+        show_message('먼저 이미지를 로드하세요!');
     }
 }
 
@@ -3674,9 +3674,9 @@ function toggle_accordion_panel(e) {
 function img_loading_spinbar(show) {
     var panel = document.getElementById('loaded_img_panel_title');
     if (show) {
-        panel.innerHTML = 'Loaded Images &nbsp;&nbsp;<div class="loading_spinbox"></div>';
+        panel.innerHTML = '로드된 이미지 &nbsp;&nbsp;<div class="loading_spinbox"></div>';
     } else {
-        panel.innerHTML = 'Loaded Images &nbsp;&nbsp;';
+        panel.innerHTML = '로드된 이미지 &nbsp;&nbsp;';
     }
 }
 
