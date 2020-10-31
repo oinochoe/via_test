@@ -121,6 +121,7 @@ let _via_loaded_img_fn_list_table_html = [];
 // UI html elements
 let invisible_file_input = document.getElementById('invisible_file_input');
 let canvas_panel = document.getElementById('canvas_panel');
+let canvas_panel_parent = document.querySelector('.file_area');
 
 let annotation_list_snippet = document.getElementById('annotation_list_snippet');
 let annotation_textarea = document.getElementById('annotation_textarea');
@@ -175,7 +176,7 @@ function show_home_panel() {
         show_all_canvas();
         set_all_text_panel_display('none');
     } else {
-        var start_info = '<p><a title="이미지로드" onclick="sel_local_images()">이미지 로드하기</a></p>';
+        var start_info = '<div class="btn_load"><a title="이미지로드" onclick="sel_local_images()">이미지 로드하기</a></div>';
         clear_image_display_area();
         document.getElementById('via_start_info_panel').innerHTML = start_info;
         document.getElementById('via_start_info_panel').style.display = 'block';
@@ -1085,11 +1086,11 @@ function set_all_canvas_scale(s) {
 }
 
 function show_all_canvas() {
-    canvas_panel.style.display = 'inline-block';
+    canvas_panel_parent.style.display = 'flex';
 }
 
 function hide_all_canvas() {
-    canvas_panel.style.display = 'none';
+    canvas_panel_parent.style.display = 'none';
 }
 
 function jump_to_image(image_index) {
@@ -3279,9 +3280,9 @@ function save_current_data_to_browser_cache() {
             } catch (err) {
                 _via_is_save_ongoing = false;
                 _via_is_local_storage_available = false;
-                show_message('캐시된 데이터를 불러오지 못하였습니다.');
-                alert('캐시된 데이터를 불러오지 못하였습니다.');
-                console.log('캐시데이터로 저장하지 못하였습니다.');
+                show_message('임시저장된 데이터를 불러오지 못하였습니다.');
+                alert('임시저장된 데이터를 불러오지 못하였습니다.');
+                console.log('임시제데이터로 저장하지 못하였습니다.');
                 console.log(err.message);
             }
         }
@@ -3305,17 +3306,21 @@ function show_localStorage_recovery_options() {
         var hstr = [];
         var saved_date = localStorage.getItem('_via_timestamp');
         var saved_data_size = localStorage.getItem('_via_img_metadata').length / 1024; // in Kb
-
-        hstr.push('<h3>캐시데이터에서 복원</h3>');
+        hstr.push('<div class="cached_data">');
+        hstr.push('<h3 class="headings">임시저장된 데이터</h3>');
         hstr.push('<ul><li>저장됨 : ' + saved_date + '</li>');
         hstr.push('<li>Size : ' + Math.round(saved_data_size) + ' KB</li>');
         hstr.push('</ul>');
-        hstr.push('<a title="json으로 저장하기" onclick="download_localStorage_data(\'json\')" title="캐시된 데이터 저장하기">저장</a>');
-        hstr.push('<a onclick="remove_via_data_from_localStorage(); show_home_panel();" title="캐시된 데이터 버리기">삭제</a>');
+        hstr.push('<div class="btn_wrap">');
+        hstr.push(
+            '<button type="button" title="json으로 저장하기" onclick="download_localStorage_data(\'json\')" title="임시저장된 데이터 저장하기">저장</button>',
+        );
+        hstr.push('<button type="button" onclick="remove_via_data_from_localStorage(); show_home_panel();" title="임시저장된 데이터 버리기">삭제</button>');
+        hstr.push('</div></div>');
         via_start_info_panel.innerHTML += hstr.join('');
     } catch (err) {
-        show_message('캐시된 데이터 불러오기 실패.');
-        console.log('캐시된 데이터 불러오기 실패.');
+        show_message('임시저장된 데이터 불러오기 실패.');
+        console.log('임시저장된 데이터 불러오기 실패.');
         console.log(err.message);
     }
 }
@@ -3555,6 +3560,7 @@ function toggle_attributes_input_panel() {
     }
 }
 
+/* reg attribute 패널 */
 function toggle_reg_attr_panel() {
     if (_via_current_image_loaded) {
         var panel = document.getElementById('reg_attr_panel_button');
@@ -3589,6 +3595,7 @@ function toggle_reg_attr_panel() {
     }
 }
 
+/* 파일 속성 패널 토글 */
 function toggle_file_attr_panel() {
     if (_via_current_image_loaded) {
         var panel = document.getElementById('file_attr_panel_button');
@@ -3618,6 +3625,7 @@ function toggle_file_attr_panel() {
     }
 }
 
+/* 속성 업데이트 */
 function update_attribute_value(attr_id, value) {
     var attr_id_split = attr_id.split('#');
     var type = attr_id_split[0];
@@ -3643,6 +3651,7 @@ function update_attribute_value(attr_id, value) {
     save_current_data_to_browser_cache();
 }
 
+/* 새로운 속성 추가 */
 function add_new_attribute(type, attribute_name) {
     switch (type) {
         case 'r': // region attribute
@@ -3662,14 +3671,6 @@ function add_new_attribute(type, attribute_name) {
     _via_is_user_adding_attribute_name = false;
 }
 
-//
-// left sidebar toolbox maintainer
-//
-function toggle_accordion_panel(e) {
-    e.classList.toggle('active');
-    e.nextElementSibling.classList.toggle('show');
-}
-
 // 로딩 스피너 다른걸로 바꾸자..
 function img_loading_spinbar(show) {
     var panel = document.getElementById('loaded_img_panel_title');
@@ -3680,6 +3681,7 @@ function img_loading_spinbar(show) {
     }
 }
 
+/* 이미지 리스트 컨트롤 */
 function update_img_fn_list() {
     var regex = document.getElementById('img_fn_list_regex').value;
     if (regex === '' || regex === null) {
@@ -3698,18 +3700,20 @@ function update_img_fn_list() {
     img_fn_list_scroll_to_current_file();
 }
 
+/* 이미지 리스트 컨트롤 */
 function img_fn_list_onregex() {
     img_fn_list_generate_html(document.getElementById('img_fn_list_regex').value);
     img_fn_list.innerHTML = _via_loaded_img_fn_list_table_html.join('');
     img_fn_list_scroll_to_current_file();
 }
 
+/* 이미지 리스트 컨트롤 */
 function img_fn_list_ith_entry_html(i) {
     var htmli = '';
     var filename = _via_loaded_img_fn_list[i];
     if (i === _via_image_index) {
         // highlight the current entry
-        htmli += '<li id="flist' + i + '" style="cursor: default;">';
+        htmli += '<li id="flist' + i + '" class="active" style="cursor: default;">';
         htmli += '<b>[' + (i + 1) + '] ' + filename + '</b>';
     } else {
         htmli += '<li id="flist' + i + '" onclick="jump_to_image(' + i + ')">';
@@ -3719,6 +3723,7 @@ function img_fn_list_ith_entry_html(i) {
     return htmli;
 }
 
+/* 이미지 리스트 컨트롤 */
 function img_fn_list_generate_html(regex) {
     _via_loaded_img_fn_list_table_html = [];
     _via_loaded_img_fn_list_file_index = [];
@@ -3733,6 +3738,7 @@ function img_fn_list_generate_html(regex) {
     _via_loaded_img_fn_list_table_html.push('</ul>');
 }
 
+/* 이미지 리스트 컨트롤 */
 function img_fn_list_scroll_to_current_file() {
     if (_via_loaded_img_fn_list_file_index.includes(_via_image_index)) {
         var sel_file = document.getElementById('flist' + _via_image_index);
