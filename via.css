@@ -1,4 +1,10 @@
-@charset "utf-8";main { display: block; position: relative; }
+@charset "utf-8";
+
+/* 안보이는 파일 영역 */
+#invisible_file_input { display: none; width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; position: absolute; z-index: -1; }
+
+/* 메인 */
+.main { display: block; position: relative; }
 
 #canvas_panel { position: relative; margin: 0; padding: 0; }
 #canvas_panel canvas:focus { outline: none; }
@@ -18,8 +24,6 @@ ul.region_shape .selected { fill: #ffffff; stroke: #ff0000; }
 
 /* 하단 메시지 노출 */
 #message_panel { position: fixed; left: 0; bottom: 0px; line-height: 3em; width: 100%; background-color: #000000; color: #ffff00; font-size: small; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; z-index: 1000; }
-
-#invisible_file_input { display: none; width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; position: absolute; z-index: -1; }
 
 .action_text_link { background-color: #aaeeff; color: #000000; }
 .action_text_link:hover { cursor: pointer; }
