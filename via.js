@@ -335,26 +335,26 @@ function import_region_attributes_from_csv(data) {
     save_current_data_to_browser_cache();
 }
 
+// file import 하기
 function import_annotations_from_file(event) {
     var selected_files = event.target.files;
     for (var i = 0; i < selected_files.length; ++i) {
         var file = selected_files[i];
         switch (file.type) {
-            case '': // Fall-through // Windows 10: Firefox and Chrome do not report filetype
-                show_message('File type for ' + file.name + ' cannot be determined! Assuming text/plain.');
-            case 'text/plain': // Fall-through
-            case 'application/vnd.ms-excel': // Fall-through // @todo: filetype of VIA csv annotations in Windows 10 , fix this (reported by @Eli Walker)
+            case '':
+                show_message(file.name + '는 올바른 파일형식이 아닙니다.');
+                break;
+            case 'text/plain':
+            case 'application/vnd.ms-excel':
             case 'text/csv':
                 load_text_file(file, import_annotations_from_csv);
                 break;
-
-            case 'text/json': // Fall-through
+            case 'text/json':
             case 'application/json':
                 load_text_file(file, import_annotations_from_json);
                 break;
-
             default:
-                show_message('Annotations cannot be imported from file of type ' + file.type);
+                show_message('해당 파일형식을 불러올 수 없습니다. - ' + file.type);
                 break;
         }
     }
@@ -3266,7 +3266,7 @@ function save_current_data_to_browser_cache() {
             try {
                 _via_is_save_ongoing = true;
                 var img_metadata = pack_via_metadata('json');
-                var timenow = new Date().toUTCString();
+                var timenow = new Date();
                 localStorage.setItem('_via_timestamp', timenow);
                 localStorage.setItem('_via_img_metadata', img_metadata[0]);
                 // save attributes
@@ -3299,30 +3299,23 @@ function remove_via_data_from_localStorage() {
     }
 }
 
+// 로컬스토리지에 저장된 데이터 보여주기
 function show_localStorage_recovery_options() {
     try {
         var hstr = [];
         var saved_date = localStorage.getItem('_via_timestamp');
         var saved_data_size = localStorage.getItem('_via_img_metadata').length / 1024; // in Kb
 
-        hstr.push('<div style="padding: 1em; border: 1px solid #cccccc;">');
-        hstr.push('<h3 style="border-bottom: 1px solid #5599FF">Data Recovery from Browser Cache</h3>');
-        hstr.push("<p>Annotation data from your previous session exists in this browser's cache :</h3>");
-        hstr.push('<ul><li>Saved on : ' + saved_date + '</li>');
+        hstr.push('<h3>캐시데이터에서 복원</h3>');
+        hstr.push('<ul><li>저장됨 : ' + saved_date + '</li>');
         hstr.push('<li>Size : ' + Math.round(saved_data_size) + ' KB</li>');
         hstr.push('</ul>');
-        hstr.push(
-            '<a title="Save as JSON" style="cursor: pointer; color: blue;" onclick="download_localStorage_data(\'json\')" title="Recover annotation data">Save</a>',
-        );
-        hstr.push(
-            '<a style="padding-left:2em; cursor: pointer; color: blue;" onclick="remove_via_data_from_localStorage(); show_home_panel();" title="Discard annotation data">Discard</a>',
-        );
-
-        hstr.push('<p style="clear: left;"><b>If you continue, the cached data will be discarded!</b></p></div>');
+        hstr.push('<a title="json으로 저장하기" onclick="download_localStorage_data(\'json\')" title="캐시된 데이터 저장하기">저장</a>');
+        hstr.push('<a onclick="remove_via_data_from_localStorage(); show_home_panel();" title="캐시된 데이터 버리기">삭제</a>');
         via_start_info_panel.innerHTML += hstr.join('');
     } catch (err) {
-        show_message('Failed to recover annotation data saved in browser cache.');
-        console.log('Failed to recover annotation data saved in browser cache.');
+        show_message('캐시된 데이터 불러오기 실패.');
+        console.log('캐시된 데이터 불러오기 실패.');
         console.log(err.message);
     }
 }
