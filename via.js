@@ -1059,7 +1059,7 @@ function select_region_shape(sel_shape_name) {
             break;
 
         case VIA_REGION_SHAPE.POINT:
-            show_message('클릭해서 점을 연결하세요.');
+            show_message('클릭해서 점을 찍으세요.');
             break;
 
         default:
