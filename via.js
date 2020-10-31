@@ -283,7 +283,7 @@ function store_local_img_ref(event) {
     }
 
     if (_via_img_metadata) {
-        var status_msg = 'Loaded ' + (_via_img_count - original_image_count) + ' images.';
+        var status_msg = _via_img_count - original_image_count + '개의 이미지 로드됨.';
         if (discarded_file_count) {
             status_msg += ' (이미지 파일이 아닌' + discarded_file_count + '개의 파일 삭제됨)';
         }
