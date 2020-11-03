@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VIA TEST</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
+        <link rel="stylesheet" href="via.css" />
+    </head>
+
+    <body onload="_via_init()" onresize="_via_update_ui_components()">
+        <!-- 보이지않는 파일 input -->
+        <input type="file" id="invisible_file_input" multiple name="files[]" />
+        <main class="main">
+            <section class="left_area">
+                <article class="via_box region_area">
+                    <h1 class="headings">Annotation 박스 형태 선택</h1>
+                    <ul class="region_shape">
+                        <li id="region_shape_rect" class="selected" onclick="select_region_shape('rect')" title="사각형">
+                            <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_rectangle"></use></svg>
+                        </li>
+                        <li id="region_shape_circle" onclick="select_region_shape('circle')" title="원형">
+                            <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_circle"></use></svg>
+                        </li>
+                        <li id="region_shape_ellipse" onclick="select_region_shape('ellipse')" title="타원형">
+                            <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_ellipse"></use></svg>
+                        </li>
+                        <li id="region_shape_polygon" onclick="select_region_shape('polygon')" title="다각형">
+                            <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_polygon"></use></svg>
+                        </li>
+                        <li id="region_shape_point" onclick="select_region_shape('point')" title="점">
+                            <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_point"></use></svg>
+                        </li>
+                        <li id="region_shape_polyline" onclick="select_region_shape('polyline')" title="점라인">
+                            <svg height="32" viewbox="0 0 32 32"><use xlink:href="#shape_polyline"></use></svg>
+                        </li>
+                    </ul>
+                </article>
+
+                <article class="via_box date_list">
+                    <h1 id="loaded_img_panel_title" class="headings">데이터 List</h1>
+                    <div id="img_fn_list_panel">
+                        <div>
+                            <input type="text" placeholder="이미지 검색" oninput="img_fn_list_onregex()" id="img_fn_list_regex" />
+                        </div>
+                        <div id="img_fn_list"></div>
+                    </div>
+                </article>
+
+                <article class="via_box help_area">
+                    <h1 class="headings">단축키</h1>
+                    <table>
+                        <tr>
+                            <td>n/p (&larr;/&rarr;)</td>
+                            <td>이후 / 이전 이미지</td>
+                        </tr>
+                        <tr>
+                            <td>+&nbsp;/&nbsp;-&nbsp;/&nbsp;=</td>
+                            <td>확대/축소/초기화</td>
+                        </tr>
+                        <tr>
+                            <td>Ctrl + c</td>
+                            <td>영역 복사</td>
+                        </tr>
+                        <tr>
+                            <td>Ctrl + v</td>
+                            <td>영역 붙여넣기</td>
+                        </tr>
+                        <tr>
+                            <td>Ctrl + a</td>
+                            <td>전체 영역 선택하기</td>
+                        </tr>
+                        <tr>
+                            <td>Del, Bkspc</td>
+                            <td>이미지 영역 지우기</td>
+                        </tr>
+                        <tr>
+                            <td>Esc</td>
+                            <td>동작 취소하기</td>
+                        </tr>
+                        <tr>
+                            <td>Ctrl + s</td>
+                            <td>annotation 저장하기</td>
+                        </tr>
+                    </table>
+                </article>
+            </section>
+
+            <!-- Canvas 보여주는 영역 -->
+            <section class="right_area">
+                <div class="file_area">
+                    <div id="canvas_panel">
+                        <canvas id="image_canvas"></canvas>
+                        <canvas id="region_canvas" tabindex="1">죄송하지만 브라우저를 업그레이드해주세요. Canvas는 크롬브라우저에서 최적화되어있습니다.</canvas>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text_panel" id="via_start_info_panel">VGG Image Annotator 로딩중...</div>
+                </div>
+
+                <!-- 함수명만 정리 -->
+                <!-- HOME : show_home_panel() -->
+                <!-- 이미지로드 : sel_local_images() -->
+                <!-- 객체 미리보기 : show_annotation_data() -->
+                <!-- csv 다운로드 : download_all_region_data('csv') -->
+                <!-- json 다운로드 :  download_all_region_data('json') -->
+                <!-- csv 또는 json 임포트하기 : sel_local_data_file('annotations') -->
+                <!-- regional 경계선 보이기/숨기기 :  toggle_region_boundary_visibility()-->
+                <!-- region_id 보이고 숨기기 :  toggle_region_id_visibility() -->
+
+                <!-- 툴바 -->
+                <!-- 전 이미지 : move_to_prev_image()  -->
+                <!-- 다음 이미지 : move_to_next_image()  -->
+                <!-- 줌 아웃 : zoom_out() -->
+                <!-- 줌 인 : zoom_in() -->
+                <!-- 리셋 줌 레벨 : reset_zoom_level() -->
+
+                <!-- 카피 셀렉트 리젼 : copy_sel_regions() -->
+                <!-- 붙여넣기 셀렉트 리젼 : paste_sel_regions() -->
+                <!-- 전체선택 셀렉트 리젼 : sel_all_regions() -->
+                <!-- 지우기 셀렉트 리젼 : del_sel_regions() -->
+                <div class="btn_wrap">
+                    <button onclick="toggle_reg_attr_panel()" id="reg_attr_panel_button">영역 속성</button>
+                    <button onclick="toggle_file_attr_panel()" id="file_attr_panel_button">파일 속성</button>
+
+                    <button onclick="show_annotation_data()">객체 미리보기</button>
+                    <button onclick="download_all_region_data('csv')">csv 다운로드</button>
+                    <button onclick="download_all_region_data('json')">json 다운로드</button>
+                    <button onclick="toggle_region_boundary_visibility()">영역 보이기/숨기기</button>
+                    <button onclick="toggle_region_id_visibility()">영역 id 보이기/숨기기</button>
+
+                    <button onclick="move_to_prev_image()">전 이미지</button>
+                    <button onclick="move_to_next_image()">다음 이미지</button>
+
+                    <button onclick="zoom_in()">줌인</button>
+                    <button onclick="zoom_out()">줌아웃</button>
+                    <button onclick="reset_zoom_level()">리셋 줌인아웃</button>
+
+                    <button onclick="copy_sel_regions()">영역 복사</button>
+                    <button onclick="paste_sel_regions()">영역 붙여넣기</button>
+                    <button onclick="sel_all_regions()">전체선택</button>
+                    <button onclick="del_sel_regions()">지우기</button>
+                </div>
+            </section>
+
+            <div class="annotation">
+                <!-- 그리기 도구 -->
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <defs>
+                        <symbol id="shape_rectangle">
+                            <title>Rectangular(사각형)</title>
+                            <rect width="20" height="12" x="6" y="10" stroke-width="2" />
+                        </symbol>
+                        <symbol id="shape_circle">
+                            <title>Circular(원형)</title>
+                            <circle r="10" cx="16" cy="16" stroke-width="2" />
+                        </symbol>
+                        <symbol id="shape_ellipse">
+                            <title>Elliptical(타원형)</title>
+                            <ellipse rx="12" ry="8" cx="16" cy="16" stroke-width="2" />
+                        </symbol>
+                        <symbol id="shape_polygon">
+                            <title>Polygon(다각형)</title>
+                            <path d="M 15.25,2.2372 3.625,11.6122 6,29.9872 l 20.75,-9.625 2.375,-14.75 z" stroke-width="2" />
+                        </symbol>
+                        <symbol id="shape_point">
+                            <title>Point(점)</title>
+                            <circle r="3" cx="16" cy="16" stroke-width="2" />
+                        </symbol>
+                        <symbol id="shape_polyline">
+                            <title>Polyline(점라인)</title>
+                            <path d="M 2,12 10,24 18,12 24,18" stroke-width="2" />
+                            <circle r="1" cx="2" cy="12" stroke-width="2" />
+                            <circle r="1" cx="10" cy="24" stroke-width="2" />
+                            <circle r="1" cx="18" cy="12" stroke-width="2" />
+                            <circle r="1" cx="24" cy="18" stroke-width="2" />
+                        </symbol>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- 영역 및 파일 속성 설정하는 패널 -->
+            <div id="attributes_panel">
+                <div id="attributes_panel_toolbar">
+                    <div onclick="toggle_attributes_input_panel()" class="attributes_panel_button">&times;</div>
+                </div>
+                <table id="attributes_panel_table"></table>
+            </div>
+
+            <!-- 상태 메시지 보여주기 -->
+            <div id="message_panel"></div>
+        </main>
+
+        <script src="./via.js"></script>
+    </body>
+</html>
