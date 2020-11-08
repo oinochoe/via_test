@@ -15,7 +15,6 @@ var VIA_DISPLAY_AREA_CONTENT_NAME = {
     PAGE_GETTING_STARTED: 'page_getting_started',
     PAGE_ABOUT: 'page_about',
     PAGE_START_INFO: 'page_start_info',
-    PAGE_LICENSE: 'page_license',
 };
 
 var VIA_ANNOTATION_EDITOR_MODE = { SINGLE_REGION: 'single_region', ALL_REGIONS: 'all_regions' };
@@ -251,6 +250,59 @@ var VIA_FLOAT_PRECISION = 3; // number of decimal places to include in float val
 // COCO Export
 var VIA_COCO_EXPORT_RSHAPE = ['rect', 'circle', 'ellipse', 'polygon', 'point'];
 var VIA_COCO_EXPORT_ATTRIBUTE_TYPE = [VIA_ATTRIBUTE_TYPE.DROPDOWN, VIA_ATTRIBUTE_TYPE.RADIO];
+
+
+function _via_load_submodules() {
+    // _via_basic_demo_load_img();
+    //_via_basic_demo_draw_default_regions();
+    // _via_basic_demo_define_annotations();
+    _via_basic_demo_define_attributes();
+
+    toggle_attributes_editor();
+    update_attributes_update_panel();
+
+    annotation_editor_show();
+}
+
+// var _via_basic_demo_img = [];
+// var _via_basic_demo_img_filename = ['adutta_swan.jpg', 'wikimedia_death_of_socrates.jpg'];
+
+function _via_basic_demo_load_img() {
+    // add files
+    var i, n;
+    var file_count = 0;
+    n = _via_basic_demo_img.length;
+    for (i = 0; i < n; ++i) {
+        project_file_add_base64(_via_basic_demo_img_filename[i], _via_basic_demo_img[i]);
+        file_count += 1;
+    }
+
+    _via_show_img(0);
+    update_img_fn_list();
+}
+
+function _via_basic_demo_draw_default_regions() {
+    var csv_annotations =
+        'filename,file_size,file_attributes,region_count,region_id,region_shape_attributes,region_attributes\nadutta_swan.jpg,-1,"{}",1,0,"{""name"":""polygon"",""all_points_x"":[116,94,176,343,383,385,369,406,398,364,310,297,304,244,158],""all_points_y"":[157,195,264,273,261,234,222,216,155,124,135,170,188,170,175]}","{}"\nwikimedia_death_of_socrates.jpg,-1,"{}",3,0,"{""name"":""rect"",""x"":174,""y"":139,""width"":108,""height"":227}","{}"\nwikimedia_death_of_socrates.jpg,-1,"{}",3,1,"{""name"":""rect"",""x"":347,""y"":114,""width"":91,""height"":209}","{}"\nwikimedia_death_of_socrates.jpg,-1,"{}",3,2,"{""name"":""ellipse"",""cx"":316,""cy"":180,""rx"":17,""ry"":12}","{}"';
+
+    import_annotations_from_csv(csv_annotations);
+}
+
+function _via_basic_demo_define_attributes() {
+    var attributes_json =
+        '{"region":{"name":{"type":"text","description":"Name of the object","default_value":"not_defined"},"type":{"type":"dropdown","description":"Category of object","options":{"bird":"Bird","human":"Human","cup":"Cup (object)","unknown":"Unknown (object)"},"default_options":{"unknown":true}},"image_quality":{"type":"checkbox","description":"Quality of image region","options":{"blur":"Blurred region","good_illumination":"Good Illumination","frontal":"Object in Frontal View"},"default_options":{"good":true,"frontal":true,"good_illumination":true}}},"file":{"caption":{"type":"text","description":"","default_value":""},"public_domain":{"type":"radio","description":"","options":{"yes":"Yes","no":"No"},"default_options":{"no":true}},"image_url":{"type":"text","description":"","default_value":""}}}';
+
+    project_import_attributes_from_json(attributes_json);
+}
+
+function _via_basic_demo_define_annotations() {
+    var annotations_json =
+        '{"adutta_swan.jpg-1":{"filename":"adutta_swan.jpg","size":-1,"regions":[{"shape_attributes":{"name":"polygon","all_points_x":[116,94,176,343,383,385,369,406,398,364,310,297,304,244,158],"all_points_y":[157,195,264,273,261,234,222,216,155,124,135,170,188,170,175]},"region_attributes":{"name":"Swan","type":"bird","image_quality":{"good_illumination":true}}}],"file_attributes":{"caption":"Swan in lake Geneve","public_domain":"no","image_url":"http://www.robots.ox.ac.uk/~vgg/software/via/images/swan.jpg"}},"wikimedia_death_of_socrates.jpg-1":{"filename":"wikimedia_death_of_socrates.jpg","size":-1,"regions":[{"shape_attributes":{"name":"rect","x":174,"y":139,"width":108,"height":227},"region_attributes":{"name":"Plato","type":"human","image_quality":{"good_illumination":true}}},{"shape_attributes":{"name":"rect","x":347,"y":114,"width":91,"height":209},"region_attributes":{"name":"Socrates","type":"human","image_quality":{"frontal":true,"good_illumination":true}}},{"shape_attributes":{"name":"ellipse","cx":316,"cy":180,"rx":17,"ry":12},"region_attributes":{"name":"Hemlock","type":"cup"}}],"file_attributes":{"caption":"The Death of Socrates by David","public_domain":"yes","image_url":"https://en.wikipedia.org/wiki/The_Death_of_Socrates#/media/File:David_-_The_Death_of_Socrates.jpg"}}}';
+
+    import_annotations_from_json(annotations_json);
+}
+
+
 //
 // Data structure to store metadata about file and regions
 //
@@ -300,8 +352,6 @@ function _via_init() {
     annotation_editor_set_active_button();
     init_message_panel();
 
-    // run attached sub-modules (if any)
-    // e.g. demo modules
     if (typeof _via_load_submodules === 'function') {
         console.log('Loading VIA submodule');
         setTimeout(async function () {
@@ -1231,24 +1281,9 @@ function pack_via_metadata(return_type) {
 }
 
 function export_project_to_coco_format() {
-    var coco = { info: {}, images: [], annotations: [], licenses: [], categories: [] };
-    coco['info'] = {
-        year: new Date().getFullYear(),
-        version: '1.0',
-        description: 'VIA project exported to COCO format using VGG Image Annotator (http://www.robots.ox.ac.uk/~vgg/software/via/)',
-        contributor: '',
-        url: 'http://www.robots.ox.ac.uk/~vgg/software/via/',
-        date_created: new Date().toString(),
-    };
-    coco['licenses'] = [{ id: 0, name: 'Unknown License', url: '' }]; // indicates that license is unknown
+    var coco = { images: [], annotations: [], licenses: [], categories: [] };
 
     var skipped_annotation_count = 0;
-    // We want to ensure that a COCO project imported in VIA and then exported again back to
-    // COCO format using VIA retains the image_id and category_id present in the original COCO project.
-    // A VIA project that has been created by importing annotations from a COCO project contains
-    // unique image_id of type integer and contains all unique option id. If we detect this, we reuse
-    // the existing image_id and category_id, otherwise we assign a new unique id sequentially.
-    // Currently, it is not possible to preserve the annotation_id
     var assign_unique_id = false;
     for (var img_id in _via_img_metadata) {
         if (Number.isNaN(parseInt(img_id))) {
@@ -1282,6 +1317,7 @@ function export_project_to_coco_format() {
     for (var attr_name in _via_attributes['region']) {
         if (VIA_COCO_EXPORT_ATTRIBUTE_TYPE.includes(_via_attributes['region'][attr_name]['type'])) {
             for (var attr_option_id in _via_attributes['region'][attr_name]['options']) {
+
                 var category_id;
                 if (assign_unique_id) {
                     category_id = unique_category_id;
@@ -1289,10 +1325,11 @@ function export_project_to_coco_format() {
                 } else {
                     category_id = parseInt(attr_option_id);
                 }
+
                 coco['categories'].push({
-                    supercategory: attr_name,
-                    id: category_id,
-                    name: _via_attributes['region'][attr_name]['options'][attr_option_id],
+                    'supercategory': attr_name,
+                    'id': category_id,
+                    'name': _via_attributes['region'][attr_name]['options'][attr_option_id]
                 });
                 attr_option_id_to_category_id[attr_option_id] = category_id;
             }
@@ -1322,7 +1359,6 @@ function export_project_to_coco_format() {
             width: _via_img_stat[img_index][0],
             height: _via_img_stat[img_index][1],
             file_name: _via_img_metadata[img_id].filename,
-            license: 0,
             flickr_url: file_src,
             coco_url: file_src,
             date_captured: '',
@@ -1352,6 +1388,7 @@ function export_project_to_coco_format() {
                     continue; // skip attribute value not supported by COCO format
                 }
             }
+
         }
     }
 
@@ -5303,7 +5340,6 @@ function attribute_property_on_update(p) {
     var attr_id = get_current_attribute_id();
     var attr_type = _via_attribute_being_updated;
     var new_attr_type = p.value;
-
     switch (p.id) {
         case 'attribute_name':
             if (new_attr_type !== attr_id) {
@@ -5353,6 +5389,7 @@ function attribute_property_on_update(p) {
 
                 // update existing metadata to reflect changes in attribute type
                 // ensure that attribute has only one value
+
                 for (var img_id in _via_img_metadata) {
                     for (var rindex in _via_img_metadata[img_id]['regions']) {
                         if (_via_img_metadata[img_id]['regions'][rindex]['region_attributes'].hasOwnProperty(attr_id)) {
@@ -6787,7 +6824,6 @@ function annotation_editor_on_metadata_update(p) {
         );
         return;
     }
-
     if (_via_metadata_being_updated === 'region') {
         annotation_editor_update_region_metadata(img_index_list, region_id, pid.attr_id, p.value, p.checked).then(
             function (update_count) {
