@@ -1281,7 +1281,7 @@ function pack_via_metadata(return_type) {
 }
 
 function export_project_to_coco_format() {
-    var coco = { images: [], annotations: [], licenses: [], categories: [] };
+    var coco = { images: [], annotations: [], licenses: [], categories: [], regionList: [] };
 
     var skipped_annotation_count = 0;
     var assign_unique_id = false;
@@ -1377,6 +1377,9 @@ function export_project_to_coco_format() {
             coco_annotation['image_id'] = coco_img_id;
 
             var region_aid_list = Object.keys(region['region_attributes']);
+
+            coco['regionList'].push(region['region_attributes']);
+
             for (var region_attribute_id in region['region_attributes']) {
                 var region_attribute_value = region['region_attributes'][region_attribute_id];
                 if (attr_option_id_to_category_id.hasOwnProperty(region_attribute_value)) {
