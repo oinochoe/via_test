@@ -16,7 +16,7 @@ var VIA_DISPLAY_AREA_CONTENT_NAME = {
 var VIA_ANNOTATION_EDITOR_MODE = { SINGLE_REGION: 'single_region', ALL_REGIONS: 'all_regions' };
 var VIA_ANNOTATION_EDITOR_PLACEMENT = { NEAR_REGION: 'NEAR_REGION', IMAGE_BOTTOM: 'IMAGE_BOTTOM', DISABLE: 'DISABLE' };
 
-var VIA_REGION_EDGE_TOL = 5; // pixel
+var VIA_REGION_EDGE_TOL = 5;
 var VIA_REGION_CONTROL_POINT_SIZE = 2;
 var VIA_POLYGON_VERTEX_MATCH_TOL = 5;
 var VIA_REGION_MIN_DIM = 3;
@@ -247,6 +247,8 @@ var VIA_FLOAT_PRECISION = 3; // number of decimal places to include in float val
 var VIA_COCO_EXPORT_RSHAPE = ['rect', 'circle', 'ellipse', 'polygon', 'point'];
 var VIA_COCO_EXPORT_ATTRIBUTE_TYPE = [VIA_ATTRIBUTE_TYPE.DROPDOWN, VIA_ATTRIBUTE_TYPE.RADIO];
 
+parent.document.addEventListener('API_DATA_LOADED', _via_init);
+parent.document.dispatchEvent( new Event('VIAJS_EMBEDED'));
 
 function _via_load_submodules() {
     // _via_basic_demo_load_img();
@@ -317,7 +319,9 @@ function file_region() {
 //
 // Initialization routine
 //
-function _via_init() {
+function _via_init( event ) {
+
+    parent.document.removeEventListener('API_DATA_LOADED', _via_init);
 
     if (_via_is_debug_mode) {
         document.getElementById('ui_top_panel').innerHTML += '<span>DEBUG MODE</span>';
@@ -352,6 +356,18 @@ function _via_init() {
             await _via_load_submodules();
         }, 100);
     }
+
+    event &&
+    event.type === 'API_DATA_LOADED' &&
+    event.data &&
+    setAPIData( event.data );
+    // event가 들어오면 해당 file로 셋하는 것...
+}
+
+function setAPIData ( data ) {
+    var file = new File([JSON.stringify(data)], 'via_project_26Mar2020_16h5m.json', { type : 'text/json' });
+    project_set_name( data._via_settings.project.name );
+    load_text_file( file, project_open_parse_json_file );
 }
 
 function _via_init_reg_canvas_context() {
@@ -531,7 +547,9 @@ function download_all_region_data(type, file_extension) {
             if (file_extension !== 'csv' || file_extension !== 'json') {
                 filename += '_' + type + '.' + file_extension;
             }
-            save_data_to_local_file(all_region_data_blob, filename);
+
+            // TODO : 로컬파일로 떨구지 않는다.
+            // save_data_to_local_file(all_region_data_blob, filename);
         }.bind(this),
         function (err) {
             show_message('Failed to download data: [' + err + ']');
@@ -609,9 +627,6 @@ function import_annotations_from_file(event) {
     }
 }
 
-function load_coco_annotations_json_file(event) {
-    load_text_file(event.target.files[0], import_coco_annotations_from_json);
-}
 
 function import_annotations_from_csv(data) {
     return new Promise(function (ok_callback, err_callback) {
@@ -775,6 +790,158 @@ function parse_csv_header_line(line) {
     }
 }
 
+function import_annotations_from_json(data_str) {
+    return new Promise(function (ok_callback, err_callback) {
+        if (data_str === '' || typeof data_str === 'undefined') {
+            return;
+        }
+
+        var data = JSON.parse(data_str);
+
+        var region_import_count = 0;
+        var file_added_count = 0;
+        var malformed_entries_count = 0;
+        for (var img_id in data) {
+            if (!_via_img_metadata.hasOwnProperty(img_id)) {
+                project_add_new_file(data[img_id].filename, data[img_id].size, img_id);
+                if (_via_settings.core.default_filepath === '') {
+                    _via_img_src[img_id] = data[img_id].filename;
+                } else {
+                    _via_file_resolve_file_to_default_filepath(img_id);
+                }
+                file_added_count += 1;
+            }
+
+            // copy file attributes
+            for (var key in data[img_id].file_attributes) {
+                if (key === '') {
+                    continue;
+                }
+
+                _via_img_metadata[img_id].file_attributes[key] = data[img_id].file_attributes[key];
+
+                // add this file attribute to _via_attributes
+                if (!_via_attributes['file'].hasOwnProperty(key)) {
+                    _via_attributes['file'][key] = { type: 'text' };
+                }
+            }
+
+            // copy regions
+            var regions = data[img_id].regions;
+            for (var i in regions) {
+                var region_i = new file_region();
+                for (var sid in regions[i].shape_attributes) {
+                    region_i.shape_attributes[sid] = regions[i].shape_attributes[sid];
+                }
+                for (var rid in regions[i].region_attributes) {
+                    if (rid === '') {
+                        continue;
+                    }
+
+                    region_i.region_attributes[rid] = regions[i].region_attributes[rid];
+
+                    // add this region attribute to _via_attributes
+                    if (!_via_attributes['region'].hasOwnProperty(rid)) {
+                        _via_attributes['region'][rid] = { type: 'text' };
+                    }
+                }
+
+                // add regions only if they are present
+                if (Object.keys(region_i.shape_attributes).length > 0 || Object.keys(region_i.region_attributes).length > 0) {
+                    _via_img_metadata[img_id].regions.push(region_i);
+                    region_import_count += 1;
+                }
+            }
+        }
+        show_message(
+            'Import Summary : [' +
+                file_added_count +
+                '] new files, ' +
+                '[' +
+                region_import_count +
+                '] regions, ' +
+                '[' +
+                malformed_entries_count +
+                '] malformed entries.',
+        );
+
+        if (file_added_count) {
+            update_img_fn_list();
+        }
+
+        if (_via_current_image_loaded) {
+            if (region_import_count) {
+                update_attributes_update_panel();
+                annotation_editor_update_content();
+                _via_load_canvas_regions(); // image to canvas space transform
+                _via_redraw_reg_canvas();
+                _via_reg_canvas.focus();
+            }
+        } else {
+            if (file_added_count) {
+                _via_show_img(0);
+            }
+        }
+
+        ok_callback([file_added_count, region_import_count, malformed_entries_count]);
+    });
+}
+
+// assumes that csv line follows the RFC 4180 standard
+// see: https://en.wikipedia.org/wiki/Comma-separated_values
+function parse_csv_line(s, field_separator) {
+    if (typeof s === 'undefined' || s.length === 0) {
+        return [];
+    }
+
+    if (typeof field_separator === 'undefined') {
+        field_separator = ',';
+    }
+    var double_quote_seen = false;
+    var start = 0;
+    var d = [];
+
+    var i = 0;
+    while (i < s.length) {
+        if (s.charAt(i) === field_separator) {
+            if (double_quote_seen) {
+                // field separator inside double quote is ignored
+                i = i + 1;
+            } else {
+                //var part = s.substr(start, i - start);
+                d.push(s.substr(start, i - start));
+                start = i + 1;
+                i = i + 1;
+            }
+        } else {
+            if (s.charAt(i) === '"') {
+                if (double_quote_seen) {
+                    if (s.charAt(i + 1) === '"') {
+                        // ignore escaped double quotes
+                        i = i + 2;
+                    } else {
+                        // closing of double quote
+                        double_quote_seen = false;
+                        i = i + 1;
+                    }
+                } else {
+                    double_quote_seen = true;
+                    start = i;
+                    i = i + 1;
+                }
+            } else {
+                i = i + 1;
+            }
+        }
+    }
+    // extract the last field (csv rows have no trailing comma)
+    d.push(s.substr(start));
+    return d;
+}
+
+function load_coco_annotations_json_file(event) {
+    load_text_file(event.target.files[0], import_coco_annotations_from_json);
+}
 // see http://cocodataset.org/#format-data
 function import_coco_annotations_from_json(data_str) {
     return new Promise(function (ok_callback, err_callback) {
@@ -911,154 +1078,6 @@ function import_coco_annotations_from_json(data_str) {
         }
         ok_callback([_via_img_count, imported_region_count, 0]);
     });
-}
-
-function import_annotations_from_json(data_str) {
-    return new Promise(function (ok_callback, err_callback) {
-        if (data_str === '' || typeof data_str === 'undefined') {
-            return;
-        }
-
-        var d = JSON.parse(data_str);
-        var region_import_count = 0;
-        var file_added_count = 0;
-        var malformed_entries_count = 0;
-        for (var img_id in d) {
-            if (!_via_img_metadata.hasOwnProperty(img_id)) {
-                project_add_new_file(d[img_id].filename, d[img_id].size, img_id);
-                if (_via_settings.core.default_filepath === '') {
-                    _via_img_src[img_id] = d[img_id].filename;
-                } else {
-                    _via_file_resolve_file_to_default_filepath(img_id);
-                }
-                file_added_count += 1;
-            }
-
-            // copy file attributes
-            for (var key in d[img_id].file_attributes) {
-                if (key === '') {
-                    continue;
-                }
-
-                _via_img_metadata[img_id].file_attributes[key] = d[img_id].file_attributes[key];
-
-                // add this file attribute to _via_attributes
-                if (!_via_attributes['file'].hasOwnProperty(key)) {
-                    _via_attributes['file'][key] = { type: 'text' };
-                }
-            }
-
-            // copy regions
-            var regions = d[img_id].regions;
-            for (var i in regions) {
-                var region_i = new file_region();
-                for (var sid in regions[i].shape_attributes) {
-                    region_i.shape_attributes[sid] = regions[i].shape_attributes[sid];
-                }
-                for (var rid in regions[i].region_attributes) {
-                    if (rid === '') {
-                        continue;
-                    }
-
-                    region_i.region_attributes[rid] = regions[i].region_attributes[rid];
-
-                    // add this region attribute to _via_attributes
-                    if (!_via_attributes['region'].hasOwnProperty(rid)) {
-                        _via_attributes['region'][rid] = { type: 'text' };
-                    }
-                }
-
-                // add regions only if they are present
-                if (Object.keys(region_i.shape_attributes).length > 0 || Object.keys(region_i.region_attributes).length > 0) {
-                    _via_img_metadata[img_id].regions.push(region_i);
-                    region_import_count += 1;
-                }
-            }
-        }
-        show_message(
-            'Import Summary : [' +
-                file_added_count +
-                '] new files, ' +
-                '[' +
-                region_import_count +
-                '] regions, ' +
-                '[' +
-                malformed_entries_count +
-                '] malformed entries.',
-        );
-
-        if (file_added_count) {
-            update_img_fn_list();
-        }
-
-        if (_via_current_image_loaded) {
-            if (region_import_count) {
-                update_attributes_update_panel();
-                annotation_editor_update_content();
-                _via_load_canvas_regions(); // image to canvas space transform
-                _via_redraw_reg_canvas();
-                _via_reg_canvas.focus();
-            }
-        } else {
-            if (file_added_count) {
-                _via_show_img(0);
-            }
-        }
-
-        ok_callback([file_added_count, region_import_count, malformed_entries_count]);
-    });
-}
-
-// assumes that csv line follows the RFC 4180 standard
-// see: https://en.wikipedia.org/wiki/Comma-separated_values
-function parse_csv_line(s, field_separator) {
-    if (typeof s === 'undefined' || s.length === 0) {
-        return [];
-    }
-
-    if (typeof field_separator === 'undefined') {
-        field_separator = ',';
-    }
-    var double_quote_seen = false;
-    var start = 0;
-    var d = [];
-
-    var i = 0;
-    while (i < s.length) {
-        if (s.charAt(i) === field_separator) {
-            if (double_quote_seen) {
-                // field separator inside double quote is ignored
-                i = i + 1;
-            } else {
-                //var part = s.substr(start, i - start);
-                d.push(s.substr(start, i - start));
-                start = i + 1;
-                i = i + 1;
-            }
-        } else {
-            if (s.charAt(i) === '"') {
-                if (double_quote_seen) {
-                    if (s.charAt(i + 1) === '"') {
-                        // ignore escaped double quotes
-                        i = i + 2;
-                    } else {
-                        // closing of double quote
-                        double_quote_seen = false;
-                        i = i + 1;
-                    }
-                } else {
-                    double_quote_seen = true;
-                    start = i;
-                    i = i + 1;
-                }
-            } else {
-                i = i + 1;
-            }
-        }
-    }
-    // extract the last field (csv rows have no trailing comma)
-    d.push(s.substr(start));
-    return d;
 }
 
 // s = '{"name":"rect","x":188,"y":90,"width":243,"height":233}'
@@ -7159,14 +7178,26 @@ function project_save_confirmed(input) {
         _via_settings: _via_settings,
         _via_img_metadata: _via_img_metadata,
         _via_attributes: _via_attributes,
-        _via_data_format_version: '2.0.10',
         _via_image_id_list: _via_image_id_list,
     };
 
     var filename = input.project_name.value + '.json';
     var data_blob = new Blob([JSON.stringify(_via_project)], { type: 'text/json;charset=utf-8' });
 
-    save_data_to_local_file(data_blob, filename);
+    // TODO  파일로 떨구지 않아..
+    // save_data_to_local_file(data_blob, filename);
+
+    pack_via_metadata('coco').then(
+        function (data) {
+            var event = new Event( 'DATA_SAVE' );
+            event.data = _via_project;
+            event.cocoData = JSON.parse( data );
+            parent.document.dispatchEvent( event );
+        }.bind(this),
+        function (error) {
+            show_message( 'Failed to convert data : [' + error + ']')
+        }.bind(this)
+    )
 
     user_input_default_cancel_handler();
 }
