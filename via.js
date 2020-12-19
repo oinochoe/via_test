@@ -1,10 +1,6 @@
 'use strict';
 
-var VIA_VERSION = '2.0.10';
-var VIA_NAME = 'VGG Image Annotator';
-var VIA_SHORT_NAME = 'VIA';
 var VIA_REGION_SHAPE = { RECT: 'rect', CIRCLE: 'circle', ELLIPSE: 'ellipse', POLYGON: 'polygon', POINT: 'point', POLYLINE: 'polyline' };
-
 var VIA_ATTRIBUTE_TYPE = { TEXT: 'text', CHECKBOX: 'checkbox', RADIO: 'radio', IMAGE: 'image', DROPDOWN: 'dropdown' };
 
 var VIA_DISPLAY_AREA_CONTENT_NAME = {
@@ -322,8 +318,6 @@ function file_region() {
 // Initialization routine
 //
 function _via_init() {
-    console.log(VIA_NAME);
-    show_message(VIA_NAME + ' (' + VIA_SHORT_NAME + ') version ' + VIA_VERSION + '. Ready !', 2 * VIA_THEME_MESSAGE_TIMEOUT_MS);
 
     if (_via_is_debug_mode) {
         document.getElementById('ui_top_panel').innerHTML += '<span>DEBUG MODE</span>';
@@ -370,7 +364,7 @@ function _via_init_keyboard_handlers() {
     _via_reg_canvas.addEventListener('keyup', _via_reg_canvas_keyup_handler, false);
 }
 
-// handles drawing of regions over image by the user
+// 이미지위에 그리는 부분 핸들링
 function _via_init_mouse_handlers() {
     _via_reg_canvas.addEventListener('dblclick', _via_reg_canvas_dblclick_handler, false);
     _via_reg_canvas.addEventListener('mousedown', _via_reg_canvas_mousedown_handler, false);
