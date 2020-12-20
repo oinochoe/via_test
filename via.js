@@ -16,7 +16,7 @@ var VIA_DISPLAY_AREA_CONTENT_NAME = {
 var VIA_ANNOTATION_EDITOR_MODE = { SINGLE_REGION: 'single_region', ALL_REGIONS: 'all_regions' };
 var VIA_ANNOTATION_EDITOR_PLACEMENT = { NEAR_REGION: 'NEAR_REGION', IMAGE_BOTTOM: 'IMAGE_BOTTOM', DISABLE: 'DISABLE' };
 
-var VIA_REGION_EDGE_TOL = 5;
+var VIA_REGION_EDGE_TOL = 5; // pixel
 var VIA_REGION_CONTROL_POINT_SIZE = 2;
 var VIA_POLYGON_VERTEX_MATCH_TOL = 5;
 var VIA_REGION_MIN_DIM = 3;
@@ -243,61 +243,20 @@ var VIA_LEFTSIDEBAR_WIDTH_CHANGE = 1; // in rem
 var VIA_POLYGON_SEGMENT_SUBTENDED_ANGLE = 5; // in degree (used to approximate shapes using polygon)
 var VIA_FLOAT_PRECISION = 3; // number of decimal places to include in float values
 
+parent.document.addEventListener('API_DATA_LOADED', _via_init);
+parent.document.dispatchEvent( new Event('VIAJS_EMBEDED'));
+
+
 // COCO Export
 var VIA_COCO_EXPORT_RSHAPE = ['rect', 'circle', 'ellipse', 'polygon', 'point'];
 var VIA_COCO_EXPORT_ATTRIBUTE_TYPE = [VIA_ATTRIBUTE_TYPE.DROPDOWN, VIA_ATTRIBUTE_TYPE.RADIO];
 
-parent.document.addEventListener('API_DATA_LOADED', _via_init);
-parent.document.dispatchEvent( new Event('VIAJS_EMBEDED'));
-
 function _via_load_submodules() {
-    // _via_basic_demo_load_img();
-    //_via_basic_demo_draw_default_regions();
-    // _via_basic_demo_define_annotations();
-    _via_basic_demo_define_attributes();
 
     toggle_attributes_editor();
     update_attributes_update_panel();
 
     annotation_editor_show();
-}
-
-// var _via_basic_demo_img = [];
-// var _via_basic_demo_img_filename = ['adutta_swan.jpg', 'wikimedia_death_of_socrates.jpg'];
-
-function _via_basic_demo_load_img() {
-    // add files
-    var i, n;
-    var file_count = 0;
-    n = _via_basic_demo_img.length;
-    for (i = 0; i < n; ++i) {
-        project_file_add_base64(_via_basic_demo_img_filename[i], _via_basic_demo_img[i]);
-        file_count += 1;
-    }
-
-    _via_show_img(0);
-    update_img_fn_list();
-}
-
-function _via_basic_demo_draw_default_regions() {
-    var csv_annotations =
-        'filename,file_size,file_attributes,region_count,region_id,region_shape_attributes,region_attributes\nadutta_swan.jpg,-1,"{}",1,0,"{""name"":""polygon"",""all_points_x"":[116,94,176,343,383,385,369,406,398,364,310,297,304,244,158],""all_points_y"":[157,195,264,273,261,234,222,216,155,124,135,170,188,170,175]}","{}"\nwikimedia_death_of_socrates.jpg,-1,"{}",3,0,"{""name"":""rect"",""x"":174,""y"":139,""width"":108,""height"":227}","{}"\nwikimedia_death_of_socrates.jpg,-1,"{}",3,1,"{""name"":""rect"",""x"":347,""y"":114,""width"":91,""height"":209}","{}"\nwikimedia_death_of_socrates.jpg,-1,"{}",3,2,"{""name"":""ellipse"",""cx"":316,""cy"":180,""rx"":17,""ry"":12}","{}"';
-
-    import_annotations_from_csv(csv_annotations);
-}
-
-function _via_basic_demo_define_attributes() {
-    var attributes_json =
-        '{"region":{"name":{"type":"text","description":"Name of the object","default_value":"not_defined"},"type":{"type":"dropdown","description":"Category of object","options":{"bird":"Bird","human":"Human","cup":"Cup (object)","unknown":"Unknown (object)"},"default_options":{"unknown":true}},"image_quality":{"type":"checkbox","description":"Quality of image region","options":{"blur":"Blurred region","good_illumination":"Good Illumination","frontal":"Object in Frontal View"},"default_options":{"good":true,"frontal":true,"good_illumination":true}}},"file":{"caption":{"type":"text","description":"","default_value":""},"public_domain":{"type":"radio","description":"","options":{"yes":"Yes","no":"No"},"default_options":{"no":true}},"image_url":{"type":"text","description":"","default_value":""}}}';
-
-    project_import_attributes_from_json(attributes_json);
-}
-
-function _via_basic_demo_define_annotations() {
-    var annotations_json =
-        '{"adutta_swan.jpg-1":{"filename":"adutta_swan.jpg","size":-1,"regions":[{"shape_attributes":{"name":"polygon","all_points_x":[116,94,176,343,383,385,369,406,398,364,310,297,304,244,158],"all_points_y":[157,195,264,273,261,234,222,216,155,124,135,170,188,170,175]},"region_attributes":{"name":"Swan","type":"bird","image_quality":{"good_illumination":true}}}],"file_attributes":{"caption":"Swan in lake Geneve","public_domain":"no","image_url":"http://www.robots.ox.ac.uk/~vgg/software/via/images/swan.jpg"}},"wikimedia_death_of_socrates.jpg-1":{"filename":"wikimedia_death_of_socrates.jpg","size":-1,"regions":[{"shape_attributes":{"name":"rect","x":174,"y":139,"width":108,"height":227},"region_attributes":{"name":"Plato","type":"human","image_quality":{"good_illumination":true}}},{"shape_attributes":{"name":"rect","x":347,"y":114,"width":91,"height":209},"region_attributes":{"name":"Socrates","type":"human","image_quality":{"frontal":true,"good_illumination":true}}},{"shape_attributes":{"name":"ellipse","cx":316,"cy":180,"rx":17,"ry":12},"region_attributes":{"name":"Hemlock","type":"cup"}}],"file_attributes":{"caption":"The Death of Socrates by David","public_domain":"yes","image_url":"https://en.wikipedia.org/wiki/The_Death_of_Socrates#/media/File:David_-_The_Death_of_Socrates.jpg"}}}';
-
-    import_annotations_from_json(annotations_json);
 }
 
 
@@ -319,9 +278,9 @@ function file_region() {
 //
 // Initialization routine
 //
-function _via_init( event ) {
+function _via_init(event) {
 
-    parent.document.removeEventListener('API_DATA_LOADED', _via_init);
+    // parent.document.removeEventListener('API_DATA_LOADED', _via_init);
 
     if (_via_is_debug_mode) {
         document.getElementById('ui_top_panel').innerHTML += '<span>DEBUG MODE</span>';
@@ -360,14 +319,13 @@ function _via_init( event ) {
     event &&
     event.type === 'API_DATA_LOADED' &&
     event.data &&
-    setAPIData( event.data );
-    // event가 들어오면 해당 file로 셋하는 것...
+    setAPIData(event.data);
 }
 
-function setAPIData ( data ) {
-    var file = new File([JSON.stringify(data)], 'via_project_26Mar2020_16h5m.json', { type : 'text/json' });
-    project_set_name( data._via_settings.project.name );
-    load_text_file( file, project_open_parse_json_file );
+function setAPIData( data)  {
+    var file = new File([JSON.stringify(data)], 'via_project.json', { type: 'text/json' } );
+    project_set_name(data._via_settings.project.name);
+    load_text_file(file, project_open_parse_json_file);
 }
 
 function _via_init_reg_canvas_context() {
@@ -527,6 +485,40 @@ function sel_local_images() {
         invisible_file_input.click();
     }
 }
+// TODO : 만든 로직 OD-001
+function exportJSON() {
+    pack_via_metadata('json').then(
+        function (data) {
+            console.log(_via_attributes)
+            var event = new Event('DATA_SAVE');
+            event.json = data;
+            event.data = _via_attributes;
+            parent.document.dispatchEvent(event);
+
+            // save_data_to_local_file(all_region_data_blob, filename);
+        }.bind(this),
+        function (err) {
+            show_message('Failed to download data: [' + err + ']');
+        }.bind(this),
+    );
+}
+
+// TODO : 만든 로직 OD-002
+function exportCOCO() {
+    var event = new Event('DATA_COCO');
+    pack_via_metadata('coco').then(
+        function (data) {
+            event.coco = data;
+            // save_data_to_local_file(all_region_data_blob, filename);
+        }.bind(this),
+        function (err) {
+            show_message('Failed to download data: [' + err + ']');
+        }.bind(this),
+    );
+
+    parent.document.dispatchEvent(event);
+}
+
 
 // invoked by menu-item buttons in HTML UI
 function download_all_region_data(type, file_extension) {
@@ -548,8 +540,8 @@ function download_all_region_data(type, file_extension) {
                 filename += '_' + type + '.' + file_extension;
             }
 
-            // TODO : 로컬파일로 떨구지 않는다.
-            // save_data_to_local_file(all_region_data_blob, filename);
+
+            save_data_to_local_file(all_region_data_blob, filename);
         }.bind(this),
         function (err) {
             show_message('Failed to download data: [' + err + ']');
@@ -627,6 +619,9 @@ function import_annotations_from_file(event) {
     }
 }
 
+function load_coco_annotations_json_file(event) {
+    load_text_file(event.target.files[0], import_coco_annotations_from_json);
+}
 
 function import_annotations_from_csv(data) {
     return new Promise(function (ok_callback, err_callback) {
@@ -790,158 +785,6 @@ function parse_csv_header_line(line) {
     }
 }
 
-function import_annotations_from_json(data_str) {
-    return new Promise(function (ok_callback, err_callback) {
-        if (data_str === '' || typeof data_str === 'undefined') {
-            return;
-        }
-
-        var data = JSON.parse(data_str);
-
-        var region_import_count = 0;
-        var file_added_count = 0;
-        var malformed_entries_count = 0;
-        for (var img_id in data) {
-            if (!_via_img_metadata.hasOwnProperty(img_id)) {
-                project_add_new_file(data[img_id].filename, data[img_id].size, img_id);
-                if (_via_settings.core.default_filepath === '') {
-                    _via_img_src[img_id] = data[img_id].filename;
-                } else {
-                    _via_file_resolve_file_to_default_filepath(img_id);
-                }
-                file_added_count += 1;
-            }
-
-            // copy file attributes
-            for (var key in data[img_id].file_attributes) {
-                if (key === '') {
-                    continue;
-                }
-
-                _via_img_metadata[img_id].file_attributes[key] = data[img_id].file_attributes[key];
-
-                // add this file attribute to _via_attributes
-                if (!_via_attributes['file'].hasOwnProperty(key)) {
-                    _via_attributes['file'][key] = { type: 'text' };
-                }
-            }
-
-            // copy regions
-            var regions = data[img_id].regions;
-            for (var i in regions) {
-                var region_i = new file_region();
-                for (var sid in regions[i].shape_attributes) {
-                    region_i.shape_attributes[sid] = regions[i].shape_attributes[sid];
-                }
-                for (var rid in regions[i].region_attributes) {
-                    if (rid === '') {
-                        continue;
-                    }
-
-                    region_i.region_attributes[rid] = regions[i].region_attributes[rid];
-
-                    // add this region attribute to _via_attributes
-                    if (!_via_attributes['region'].hasOwnProperty(rid)) {
-                        _via_attributes['region'][rid] = { type: 'text' };
-                    }
-                }
-
-                // add regions only if they are present
-                if (Object.keys(region_i.shape_attributes).length > 0 || Object.keys(region_i.region_attributes).length > 0) {
-                    _via_img_metadata[img_id].regions.push(region_i);
-                    region_import_count += 1;
-                }
-            }
-        }
-        show_message(
-            'Import Summary : [' +
-                file_added_count +
-                '] new files, ' +
-                '[' +
-                region_import_count +
-                '] regions, ' +
-                '[' +
-                malformed_entries_count +
-                '] malformed entries.',
-        );
-
-        if (file_added_count) {
-            update_img_fn_list();
-        }
-
-        if (_via_current_image_loaded) {
-            if (region_import_count) {
-                update_attributes_update_panel();
-                annotation_editor_update_content();
-                _via_load_canvas_regions(); // image to canvas space transform
-                _via_redraw_reg_canvas();
-                _via_reg_canvas.focus();
-            }
-        } else {
-            if (file_added_count) {
-                _via_show_img(0);
-            }
-        }
-
-        ok_callback([file_added_count, region_import_count, malformed_entries_count]);
-    });
-}
-
-// assumes that csv line follows the RFC 4180 standard
-// see: https://en.wikipedia.org/wiki/Comma-separated_values
-function parse_csv_line(s, field_separator) {
-    if (typeof s === 'undefined' || s.length === 0) {
-        return [];
-    }
-
-    if (typeof field_separator === 'undefined') {
-        field_separator = ',';
-    }
-    var double_quote_seen = false;
-    var start = 0;
-    var d = [];
-
-    var i = 0;
-    while (i < s.length) {
-        if (s.charAt(i) === field_separator) {
-            if (double_quote_seen) {
-                // field separator inside double quote is ignored
-                i = i + 1;
-            } else {
-                //var part = s.substr(start, i - start);
-                d.push(s.substr(start, i - start));
-                start = i + 1;
-                i = i + 1;
-            }
-        } else {
-            if (s.charAt(i) === '"') {
-                if (double_quote_seen) {
-                    if (s.charAt(i + 1) === '"') {
-                        // ignore escaped double quotes
-                        i = i + 2;
-                    } else {
-                        // closing of double quote
-                        double_quote_seen = false;
-                        i = i + 1;
-                    }
-                } else {
-                    double_quote_seen = true;
-                    start = i;
-                    i = i + 1;
-                }
-            } else {
-                i = i + 1;
-            }
-        }
-    }
-    // extract the last field (csv rows have no trailing comma)
-    d.push(s.substr(start));
-    return d;
-}
-
-function load_coco_annotations_json_file(event) {
-    load_text_file(event.target.files[0], import_coco_annotations_from_json);
-}
 // see http://cocodataset.org/#format-data
 function import_coco_annotations_from_json(data_str) {
     return new Promise(function (ok_callback, err_callback) {
@@ -1078,6 +921,154 @@ function import_coco_annotations_from_json(data_str) {
         }
         ok_callback([_via_img_count, imported_region_count, 0]);
     });
+}
+
+function import_annotations_from_json(data_str) {
+    return new Promise(function (ok_callback, err_callback) {
+        if (data_str === '' || typeof data_str === 'undefined') {
+            return;
+        }
+
+        var d = JSON.parse(data_str);
+        var region_import_count = 0;
+        var file_added_count = 0;
+        var malformed_entries_count = 0;
+        for (var img_id in d) {
+            if (!_via_img_metadata.hasOwnProperty(img_id)) {
+                project_add_new_file(d[img_id].filename, d[img_id].size, img_id);
+                if (_via_settings.core.default_filepath === '') {
+                    _via_img_src[img_id] = d[img_id].filename;
+                } else {
+                    _via_file_resolve_file_to_default_filepath(img_id);
+                }
+                file_added_count += 1;
+            }
+
+            // copy file attributes
+            for (var key in d[img_id].file_attributes) {
+                if (key === '') {
+                    continue;
+                }
+
+                _via_img_metadata[img_id].file_attributes[key] = d[img_id].file_attributes[key];
+
+                // add this file attribute to _via_attributes
+                if (!_via_attributes['file'].hasOwnProperty(key)) {
+                    _via_attributes['file'][key] = { type: 'text' };
+                }
+            }
+
+            // copy regions
+            var regions = d[img_id].regions;
+            for (var i in regions) {
+                var region_i = new file_region();
+                for (var sid in regions[i].shape_attributes) {
+                    region_i.shape_attributes[sid] = regions[i].shape_attributes[sid];
+                }
+                for (var rid in regions[i].region_attributes) {
+                    if (rid === '') {
+                        continue;
+                    }
+
+                    region_i.region_attributes[rid] = regions[i].region_attributes[rid];
+
+                    // add this region attribute to _via_attributes
+                    if (!_via_attributes['region'].hasOwnProperty(rid)) {
+                        _via_attributes['region'][rid] = { type: 'text' };
+                    }
+                }
+
+                // add regions only if they are present
+                if (Object.keys(region_i.shape_attributes).length > 0 || Object.keys(region_i.region_attributes).length > 0) {
+                    _via_img_metadata[img_id].regions.push(region_i);
+                    region_import_count += 1;
+                }
+            }
+        }
+        show_message(
+            'Import Summary : [' +
+                file_added_count +
+                '] new files, ' +
+                '[' +
+                region_import_count +
+                '] regions, ' +
+                '[' +
+                malformed_entries_count +
+                '] malformed entries.',
+        );
+
+        if (file_added_count) {
+            update_img_fn_list();
+        }
+
+        if (_via_current_image_loaded) {
+            if (region_import_count) {
+                update_attributes_update_panel();
+                annotation_editor_update_content();
+                _via_load_canvas_regions(); // image to canvas space transform
+                _via_redraw_reg_canvas();
+                _via_reg_canvas.focus();
+            }
+        } else {
+            if (file_added_count) {
+                _via_show_img(0);
+            }
+        }
+
+        ok_callback([file_added_count, region_import_count, malformed_entries_count]);
+    });
+}
+
+// assumes that csv line follows the RFC 4180 standard
+// see: https://en.wikipedia.org/wiki/Comma-separated_values
+function parse_csv_line(s, field_separator) {
+    if (typeof s === 'undefined' || s.length === 0) {
+        return [];
+    }
+
+    if (typeof field_separator === 'undefined') {
+        field_separator = ',';
+    }
+    var double_quote_seen = false;
+    var start = 0;
+    var d = [];
+
+    var i = 0;
+    while (i < s.length) {
+        if (s.charAt(i) === field_separator) {
+            if (double_quote_seen) {
+                // field separator inside double quote is ignored
+                i = i + 1;
+            } else {
+                //var part = s.substr(start, i - start);
+                d.push(s.substr(start, i - start));
+                start = i + 1;
+                i = i + 1;
+            }
+        } else {
+            if (s.charAt(i) === '"') {
+                if (double_quote_seen) {
+                    if (s.charAt(i + 1) === '"') {
+                        // ignore escaped double quotes
+                        i = i + 2;
+                    } else {
+                        // closing of double quote
+                        double_quote_seen = false;
+                        i = i + 1;
+                    }
+                } else {
+                    double_quote_seen = true;
+                    start = i;
+                    i = i + 1;
+                }
+            } else {
+                i = i + 1;
+            }
+        }
+    }
+    // extract the last field (csv rows have no trailing comma)
+    d.push(s.substr(start));
+    return d;
 }
 
 // s = '{"name":"rect","x":188,"y":90,"width":243,"height":233}'
@@ -1330,7 +1321,6 @@ function export_project_to_coco_format() {
     for (var attr_name in _via_attributes['region']) {
         if (VIA_COCO_EXPORT_ATTRIBUTE_TYPE.includes(_via_attributes['region'][attr_name]['type'])) {
             for (var attr_option_id in _via_attributes['region'][attr_name]['options']) {
-
                 var category_id;
                 if (assign_unique_id) {
                     category_id = unique_category_id;
@@ -1340,9 +1330,9 @@ function export_project_to_coco_format() {
                 }
 
                 coco['categories'].push({
-                    'supercategory': attr_name,
-                    'id': category_id,
-                    'name': _via_attributes['region'][attr_name]['options'][attr_option_id]
+                    supercategory: attr_name,
+                    id: category_id,
+                    name: _via_attributes['region'][attr_name]['options'][attr_option_id],
                 });
                 attr_option_id_to_category_id[attr_option_id] = category_id;
             }
@@ -1404,7 +1394,6 @@ function export_project_to_coco_format() {
                     continue; // skip attribute value not supported by COCO format
                 }
             }
-
         }
     }
 
@@ -7178,26 +7167,14 @@ function project_save_confirmed(input) {
         _via_settings: _via_settings,
         _via_img_metadata: _via_img_metadata,
         _via_attributes: _via_attributes,
+        _via_data_format_version: '2.0.10',
         _via_image_id_list: _via_image_id_list,
     };
 
     var filename = input.project_name.value + '.json';
     var data_blob = new Blob([JSON.stringify(_via_project)], { type: 'text/json;charset=utf-8' });
 
-    // TODO  파일로 떨구지 않아..
-    // save_data_to_local_file(data_blob, filename);
-
-    pack_via_metadata('coco').then(
-        function (data) {
-            var event = new Event( 'DATA_SAVE' );
-            event.data = _via_project;
-            event.cocoData = JSON.parse( data );
-            parent.document.dispatchEvent( event );
-        }.bind(this),
-        function (error) {
-            show_message( 'Failed to convert data : [' + error + ']')
-        }.bind(this)
-    )
+    save_data_to_local_file(data_blob, filename);
 
     user_input_default_cancel_handler();
 }
@@ -7639,7 +7616,7 @@ function project_save_attributes() {
     var blob_attr = { type: 'application/json;charset=utf-8' };
     var all_region_data_blob = new Blob([JSON.stringify(_via_attributes)], blob_attr);
 
-    save_data_to_local_file(all_region_data_blob, _via_settings.project.name + '_attributes.json');
+    // save_data_to_local_file(all_region_data_blob, _via_settings.project.name + '_attributes.json');
 }
 
 function project_import_attributes_from_file(event) {
