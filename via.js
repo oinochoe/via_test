@@ -1,7 +1,13 @@
 'use strict';
 
 var VIA_REGION_SHAPE = { RECT: 'rect', CIRCLE: 'circle', ELLIPSE: 'ellipse', POLYGON: 'polygon', POINT: 'point', POLYLINE: 'polyline' };
-var VIA_ATTRIBUTE_TYPE = { TEXT: 'text', CHECKBOX: 'checkbox', RADIO: 'radio', IMAGE: 'image', DROPDOWN: 'dropdown' };
+var VIA_ATTRIBUTE_TYPE = {
+    TEXT: 'text',
+    CHECKBOX: 'checkbox',
+    RADIO: 'radio',
+    IMAGE: 'image',
+    DROPDOWN: 'dropdown'
+};
 
 var VIA_DISPLAY_AREA_CONTENT_NAME = {
     IMAGE: 'image_panel',
@@ -445,7 +451,7 @@ function show_single_image_view() {
         annotation_editor_update_content();
 
         var p = document.getElementById('toolbar_image_grid_toggle');
-        p.firstChild.setAttribute('xlink:href', '#icon_gridon');
+        // p.firstChild.setAttribute('xlink:href', '#icon_gridon');
         p.childNodes[1].innerHTML = 'Switch to Image Grid View';
     } else {
         set_display_area_content(VIA_DISPLAY_AREA_CONTENT_NAME.PAGE_START_INFO);
@@ -5298,11 +5304,15 @@ function attribute_property_add_option(attr_id, option_id, option_desc, option_d
         c1b.setAttribute('value', option_desc_info);
         c1b.setAttribute('title', 'To update, copy and paste base64 image data in this text box');
     } else {
-        c1b.setAttribute('value', option_desc);
-        c1b.setAttribute('title', option_desc);
+        // TODO: 수정됨
+        c1b.setAttribute('value', option_id);
+        c1b.setAttribute('title', option_id);
     }
     c1b.setAttribute('onchange', 'attribute_property_on_option_update(this)');
     c1b.setAttribute('id', '_via_attribute_option_description_' + option_id);
+    // TODO 추가반영
+    c1b.setAttribute('readonly', 'readonly');
+    c1b.dispatchEvent(new Event('change'));
 
     var c2 = document.createElement('span');
     var c2b = document.createElement('input');
