@@ -495,7 +495,6 @@ function sel_local_images() {
 function exportJSON() {
     pack_via_metadata('json').then(
         function (data) {
-            console.log(_via_attributes)
             var event = new Event('DATA_SAVE');
             event.json = data;
             event.data = _via_attributes;
@@ -511,18 +510,16 @@ function exportJSON() {
 
 // TODO : 만든 로직 OD-002
 function exportCOCO() {
-    var event = new Event('DATA_COCO');
     pack_via_metadata('coco').then(
         function (data) {
+            var event = new Event('DATA_COCO');
             event.coco = data;
-            // save_data_to_local_file(all_region_data_blob, filename);
+            parent.document.dispatchEvent(event);
         }.bind(this),
         function (err) {
             show_message('Failed to download data: [' + err + ']');
         }.bind(this),
     );
-
-    parent.document.dispatchEvent(event);
 }
 
 
