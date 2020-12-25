@@ -10,8 +10,10 @@ textarea{border:1px solid #cccccc;margin:0.6rem 0;padding:0.2rem 0.4rem;}
 /*s:201223추가*/
 .contents-area {width: 100%; box-sizing: border-box; padding:25px;}
 .nav {text-align: right; width: 100%; margin-bottom: 17px;}
-.nav p {display: inline-block; vertical-align: middle; padding: 0 18px; font-size: 16px; color: #a7a7a7; font-weight: 100; line-height: 1; position: relative;}
-.nav p:nth-child(1) {width: 20px; height: 15px; background: url(/static/images/icon_home.png) center no-repeat; font-size: 0;}
+.contents-area .nav p {display:inline-block; vertical-align:middle; padding:0 18px; font-size:16px; color:#a7a7a7; font-weight:100; line-height:1; position:relative;}
+.contents-area .nav p:nth-child(1) {width:20px; height:15px; background:url('/static/images/icon_home.png') center no-repeat; font-size:0;}
+.contents-area .nav p:nth-child(1):before {display:none;}
+.contents-area .nav p:last-child {padding-right:0;}
 .page-title{margin-bottom:25px;}
 .page-title h1{font-size: 28px; font-weight: 500; letter-spacing: -1px; display: inline;}
 .page-title span{font-size:18px; font-weight:300;}
@@ -48,9 +50,9 @@ textarea{border:1px solid #cccccc;margin:0.6rem 0;padding:0.2rem 0.4rem;}
 #leftsidebar{display:none;z-index:10;vertical-align:top; width:30%;}
 #display_area{display:table-cell;width:70%;z-index:1;margin:0;padding-left:1em;vertical-align:top;box-size:border-box}
 
-#image_panel{position:relative;outline:none;width:100% !important; height:0 !important; padding-top:70%;background:#eee; border-radius:10px;}
-#image_panel img{visibility:hidden;opacity:0;position:absolute;top:0px;left:0px;max-width:100%;max-height:100%;outline:none; left:50%; top:50%; -webkit-transform:translate(-50%,-50%); -moz-transform:translate(-50%,-50%); transform:translate(-50%,-50%);}
-#image_panel canvas{position:absolute;top:0px;left:0px;outline:none; /*width:100%; height:100%;*/}
+#image_panel{position:relative;outline:none;background:#eee; border-radius:10px;}
+#image_panel img{visibility:hidden;opacity:0;position:absolute;top:0px;left:0px; width:100%; height:100%;}
+#image_panel canvas{position:absolute;top:0px;left:0px;outline:none; }
 #image_panel .visible{visibility:visible !important;opacity:1 !important;}
 #image_panel label > img{visibility:visible;opacity:1;position:relative;width:auto;height:4em;outline:none;}
 #image_grid_panel{position:relative;margin:0;padding:0;width:100%;}
@@ -666,4 +668,4 @@ ul.region_shape .selected{fill:#ffffff;stroke:#ff0000;}
     75%{box-shadow:0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;}
     87.5%{box-shadow:0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;}
  }
- 
+
