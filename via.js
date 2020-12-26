@@ -4788,9 +4788,11 @@ function leftsidebar_toggle() {
     if (leftsidebar.style.display === 'none') {
         leftsidebar.style.display = 'table-cell';
         document.getElementById('leftsidebar_collapse_panel').style.display = 'none';
+        document.getElementById('display_area').style.width = '70%';
     } else {
         leftsidebar.style.display = 'none';
         document.getElementById('leftsidebar_collapse_panel').style.display = 'table-cell';
+        document.getElementById('display_area').style.width = '100%';
     }
     _via_update_ui_components();
 }
