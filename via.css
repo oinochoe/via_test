@@ -26,8 +26,9 @@ textarea{border:1px solid #cccccc;margin:0.6rem 0;padding:0.2rem 0.4rem;}
 .btn:hover{color:#fff; border: 1px solid #b60038; background: #b60038;}
 #leftsidebar .box{border:1px solid #e1e1e1; border-radius: 10px; padding:20px 16px 15px; margin-bottom: 10px;}
 #leftsidebar .box h2{font-size:18px; font-weight:400; border-bottom:#d0d0d0 solid 1px; padding-bottom:10px;}
-#leftsidebar .box > button{font-size:18px; font-weight:400; border-bottom:#d0d0d0 solid 1px; padding:0 0 10px 0; background:#fff url('/static/images/icon-plus.png') no-repeat right 30%; }
-#leftsidebar .box > button.active{ background:url('/static/images/icon-minus.png') no-repeat right 35%; }
+#leftsidebar .box > button{font-size:18px; font-weight:400; border-bottom:#d0d0d0 solid 1px; padding:0 0 10px 0; background:#fff }
+/* #leftsidebar .box > button.active{ background:url('/static/images/icon-minus.png') no-repeat right 35%; } */
+ /* url('/static/images/icon-plus.png') no-repeat right 30%; */
 /*e:201223추가*/
 
 .top_panel{font-size:0.9rem;display:block;background-color:#212121;color:#ffffff;z-index:1001;margin-bottom:1rem;}
@@ -129,6 +130,7 @@ button.leftsidebar_accordion.active:after{/*content:'\2796';*/}
 #annotation_editor .row{display:table-row;}
 #annotation_editor .highlight .col{background-color:#e6e6e6;}
 #annotation_editor .col{display:table-cell;padding:0.4em 0.6em;border:1px solid #000000;vertical-align:middle;font-size:inherit;}
+#annotation_editor .col:nth-of-type(3) {display:none;}
 #annotation_editor .header{font-weight:bold;}
 #annotation_editor .id{font-weight:bold;}
 #annotation_editor .col input[type='checkbox']{vertical-align:middle;}
@@ -682,3 +684,4 @@ ul.region_shape .selected{fill:#ffffff;stroke:#ff0000;}
 
 
  /* custom icon */
+.maximize { display:block; width:14px; height:13px; background:url('/static/images/pi_via_icon_max.png') no-repeat; }

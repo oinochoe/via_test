@@ -270,6 +270,7 @@ parent.document.dispatchEvent(new Event('VIAJS_EMBEDED'));
 var VIA_COCO_EXPORT_RSHAPE = ['rect', 'circle', 'ellipse', 'polygon', 'point'];
 var VIA_COCO_EXPORT_ATTRIBUTE_TYPE = [VIA_ATTRIBUTE_TYPE.DROPDOWN, VIA_ATTRIBUTE_TYPE.RADIO];
 
+
 function _via_load_submodules() {
     toggle_attributes_editor();
     update_attributes_update_panel();
@@ -300,6 +301,7 @@ function _via_init(event) {
     // _via_basic_demo_draw_default_regions();
     // _via_basic_demo_define_annotations();
     // _via_basic_demo_define_attributes();
+
 
     if (_via_is_debug_mode) {
         document.getElementById('ui_top_panel').innerHTML += '<span>DEBUG MODE</span>';
@@ -424,6 +426,7 @@ function _via_init_mouse_handlers() {
     _via_reg_canvas.addEventListener('touchend', _via_reg_canvas_mouseup_handler, false);
     _via_reg_canvas.addEventListener('touchmove', _via_reg_canvas_mousemove_handler, false);
 }
+
 
 //
 // Download image with annotations
@@ -558,10 +561,20 @@ function exportJSON() {
     pack_via_metadata('json').then(
         function (data) {
             var event = new Event('DATA_SAVE');
+            var checkedOK = document.querySelectorAll('#attribute_options .property input[type="checkbox"]');
+            var okObject = {};
             event.json = data;
+
+            for (let i = 0; i < checkedOK.length; i++) {
+                if(checkedOK[i].checked) {
+                    // console.log(checkedOK[i].id.split('_')[1]);
+                    var isOk = checkedOK[i].id.split('_')[1];
+                    okObject[isOk] = isOk
+                }
+            }
+            _via_attributes.region.is_ok = okObject;
             event.data = _via_attributes;
             parent.document.dispatchEvent(event);
-
             // save_data_to_local_file(all_region_data_blob, filename);
         }.bind(this),
         function (err) {
@@ -593,18 +606,18 @@ function download_all_region_data(type, file_extension) {
     // see: https://developer.mozilla.org/en-US/docs/Web/API/Blob/Blob
     pack_via_metadata(type).then(
         function (data) {
-            var blob_attr = { type: 'text/' + file_extension + ';charset=utf-8' };
-            var all_region_data_blob = new Blob(data, blob_attr);
+            // var blob_attr = { type: 'text/' + file_extension + ';charset=utf-8' };
+            // var all_region_data_blob = new Blob(data, blob_attr);
 
-            var filename = 'via_export';
-            if (typeof _via_settings !== 'undefined' && _via_settings.hasOwnProperty('project') && _via_settings['project']['name'] !== '') {
-                filename = _via_settings['project']['name'];
-            }
-            if (file_extension !== 'csv' || file_extension !== 'json') {
-                filename += '_' + type + '.' + file_extension;
-            }
+            // var filename = 'via_export';
+            // if (typeof _via_settings !== 'undefined' && _via_settings.hasOwnProperty('project') && _via_settings['project']['name'] !== '') {
+            //     filename = _via_settings['project']['name'];
+            // }
+            // if (file_extension !== 'csv' || file_extension !== 'json') {
+            //     filename += '_' + type + '.' + file_extension;
+            // }
 
-            save_data_to_local_file(all_region_data_blob, filename);
+            // save_data_to_local_file(all_region_data_blob, filename);
         }.bind(this),
         function (err) {
             show_message('Failed to download data: [' + err + ']');
@@ -5418,6 +5431,13 @@ function attribute_property_add_option(attr_id, option_id, option_desc, option_d
 
     var c3 = document.createElement('input');
     c3.setAttribute('type', 'checkbox');
+    c3.setAttribute('id', 'check_' + option_id);
+    c3.setAttribute('onchange', 'checkChecked(this)');
+
+    var okClass = (Object.keys(_via_attributes.region.is_ok));
+    if(okClass.indexOf(option_id) >= 0) {
+        c3.setAttribute('checked', 'checked');
+    }
 
     var c4 = document.createElement('i');
     c4.setAttribute('onclick', 'attribute_property_on_option_delete(this)');
@@ -5432,6 +5452,14 @@ function attribute_property_add_option(attr_id, option_id, option_desc, option_d
     p.appendChild(c4);
 
     document.getElementById('attribute_options').appendChild(p);
+}
+
+function checkChecked($elm) {
+    if($elm.getAttribute('checked')) {
+        $elm.removeAttribute('checked');
+    } else {
+        $elm.setAttribute('checked', 'checked');
+    }
 }
 
 function attribute_property_add_new_entry_option(attr_id, attribute_type) {
