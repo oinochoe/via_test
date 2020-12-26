@@ -5222,7 +5222,7 @@ function show_attribute_properties() {
 
     if (attr_input_type === 'text') {
         var attr_default_value = _via_attributes[attr_type][attr_id].default_value;
-        attribute_property_add_input_property('Default value of this attribute', '초깃값', attr_default_value, 'attribute_default_value');
+        attribute_property_add_input_property('Default value of this attribute', 'Default', attr_default_value, 'attribute_default_value');
     }
 
     // add dropdown for type of attribute
@@ -5274,7 +5274,7 @@ function show_attribute_options() {
             var c0 = document.createElement('span');
             c0.setAttribute('style', 'width:25%');
             c0.setAttribute('title', 'When selected, this is the value that appears in exported annotations');
-            c0.innerHTML = '클래스명';
+            c0.innerHTML = 'Class명';
             var c1 = document.createElement('span');
             c1.setAttribute('style', 'width:60%');
             c1.setAttribute(
@@ -5284,7 +5284,7 @@ function show_attribute_options() {
             c1.innerHTML = 'image url or b64';
             var c2 = document.createElement('span');
             c2.setAttribute('title', 'The default value of this attribute');
-            c2.innerHTML = '초깃값';
+            c2.innerHTML = 'Default';
             p.appendChild(c0);
             p.appendChild(c1);
             p.appendChild(c2);
@@ -5309,14 +5309,14 @@ function show_attribute_options() {
             var c0 = document.createElement('span');
             c0.setAttribute('style', 'width:25%');
             c0.setAttribute('title', 'When selected, this is the value that appears in exported annotations');
-            c0.innerHTML = '클래스명';
+            c0.innerHTML = 'Class명';
             var c1 = document.createElement('span');
             c1.setAttribute('style', 'width:60%');
             c1.setAttribute('title', 'This is the text shown as an option to the annotator');
             c1.innerHTML = 'description';
             var c2 = document.createElement('span');
             c2.setAttribute('title', 'The default value of this attribute');
-            c2.innerHTML = '초깃값';
+            c2.innerHTML = 'Default';
             p.appendChild(c0);
             p.appendChild(c1);
             p.appendChild(c2);

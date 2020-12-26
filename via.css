@@ -24,7 +24,7 @@ textarea{border:1px solid #cccccc;margin:0.6rem 0;padding:0.2rem 0.4rem;}
 .btn{display: inline-block; font-size:16px;line-height:38px;color:#000; min-width:260px; height: 40px;
     border: 1px solid #d0d0d0; border-radius: 5px; background: #f7f7f7; text-align: center; padding: 0 20px; cursor: pointer}
 .btn:hover{color:#fff; border: 1px solid #b60038; background: #b60038;}
-#leftsidebar .box{border:1px solid #e1e1e1; border-radius: 10px; padding:20px 20px 15px; margin-bottom: 10px;}
+#leftsidebar .box{border:1px solid #e1e1e1; border-radius: 10px; padding:20px 16px 15px; margin-bottom: 10px;}
 #leftsidebar .box h2{font-size:18px; font-weight:400; border-bottom:#d0d0d0 solid 1px; padding-bottom:10px;}
 #leftsidebar .box > button{font-size:18px; font-weight:400; border-bottom:#d0d0d0 solid 1px; padding:0 0 10px 0; background:#fff url('/static/images/icon-plus.png') no-repeat right 30%; }
 #leftsidebar .box > button.active{ background:url('/static/images/icon-minus.png') no-repeat right 35%; }
@@ -144,7 +144,7 @@ button.leftsidebar_accordion.active:after{/*content:'\2796';*/}
 #annotation_editor .col .img_options input[type='radio']{display:none;}
 #annotation_editor .col .img_options input[type='radio'] + label{display:block;cursor:pointer;text-align:center;}
 #annotation_editor .col .img_options input[type='radio']:checked + label{border:0.1em solid black;background-color:#cccccc;cursor:default;font-size:inherit;}
-#project_info_panel{display:table;border-collapse:collapse;font-size:0.8rem;}
+#project_info_panel{ display:none !important; /* display:table; */ border-collapse:collapse;font-size:0.8rem;}
 #project_info_panel .row{display:table-row;}
 #project_info_panel .col{display:table-cell;padding:0.4rem 0.1rem;border:none;}
 #project_info_panel .col input[type='text']{font-size:0.8rem;border:none;border-bottom:1px solid #cccccc;margin:0;width:100%;}
@@ -154,7 +154,7 @@ ul.region_shape li{float:left;padding:0 0.2em;fill:#ffffff;stroke:#000000;}
 ul.region_shape li:hover{cursor:pointer;fill:#ffffff;stroke:#ff0000;}
 ul.region_shape .selected{fill:#ffffff;stroke:#ff0000;}
 #region_info{font-size:0.8em;margin-bottom:0.4em;}
-#img_fn_list{display:none;font-size:small;overflow:scroll;min-height:10rem;max-height:25rem;}
+#img_fn_list{display:none;font-size:small;overflow:scroll;min-height:10rem;max-height:25rem; margin-top:10px;}
 #img_fn_list ul{position:relative;line-height:1.3em;margin:0;padding:0;list-style-type:none;}
 #img_fn_list li{white-space:nowrap;display:block;padding:0 0.4rem; font-size:16px;}
 #img_fn_list li:hover{background-color:#d5e5ff;cursor:pointer;}
@@ -550,6 +550,8 @@ button.leftsidebar_accordion.active:after{/*content:'\2796';*/}
 #attribute_properties .property span input:focus{border:1px solid black;}
 #attribute_properties .property span select{width:100%;border:1px solid #cccccc;margin:0;}
 #attribute_options{display:table;width:100%;border-collapse:collapse;margin:1rem 0;/*border:1px solid #cccccc;*/table-layout:fixed;}
+
+#attribute_options .property span:nth-of-type(2) {display:none;}
 #attribute_options .new_option_id_entry{display:inline-block;padding:1rem 0.2rem;}
 #attribute_options .new_option_id_entry input{border:none;border-bottom:1px solid #cccccc;margin:0;font-size:0.8rem;}
 #attribute_options .property{display:table-row;}
