@@ -299,103 +299,94 @@
 
                     <!-- s:키보드숏컷 팝업 -->
                     <div class="custom-popup key-shortcut">
-                        <button class="leftsidebar_accordion active">Keyboard Shortcuts</button>
-                        <div class="leftsidebar_accordion_panel show">
-                            <div style="display: block; text-align: center; padding: 1rem">Available only on image focus</div>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td style="width: 8em">
-                                            <span class="key">←</span>&nbsp;<span class="key">↑</span>&nbsp;<span class="key">→</span>&nbsp;<span class="key">↓</span>
-                                        </td>
-                                        <td>Move selected region by 1 px (Shift to jump)</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">a</span></td>
-                                        <td>Select all regions</td>
-                                    </tr>
+                        <div class="pop_container">
+                            <i class="btn_close"><img src="/static/images/x.png" alt="닫기" /></i>
+                            <p class="pop_title">단축키</p>
+                            <div>
+                                <div class="sub_title">이미지 포커스시</div>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 8em">
+                                                <span class="key">←</span>&nbsp;<span class="key">↑</span>&nbsp;<span class="key">→</span>&nbsp;<span class="key">↓</span>
+                                            </td>
+                                            <td>region 1px씩 움직이기</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">a</span></td>
+                                            <td>region 전체선택</td>
+                                        </tr>
 
-                                    <tr>
-                                        <td><span class="key">c</span></td>
-                                        <td>Copy selected regions</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">v</span></td>
-                                        <td>Paste selected regions</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">d</span></td>
-                                        <td>Delete selected regions</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">Ctrl</span> + Wheel</td>
-                                        <td>Zoom in/out (mouse cursor is over image)</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">l</span></td>
-                                        <td>Toggle region label</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">b</span></td>
-                                        <td>Toggle region boundary</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">Enter</span></td>
-                                        <td>Finish drawing polyshape</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">Backspace</span></td>
-                                        <td>Delete last polyshape vertex</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        <tr>
+                                            <td><span class="key">c</span></td>
+                                            <td>region 복사</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">v</span></td>
+                                            <td>region 붙여넣기</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">d</span></td>
+                                            <td>region 지우기</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">Ctrl</span> + Wheel</td>
+                                            <td>줌인/줌아웃</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">l</span></td>
+                                            <td>region 라벨 보기/감추기</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">b</span></td>
+                                            <td>region 영역 보기/감추기</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">Enter</span></td>
+                                            <td>어노테이션 그리기 완성</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">Backspace</span></td>
+                                            <td>어노테이션 한단계씩 삭제하기</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                            <div style="display: block; text-align: center; padding: 1rem">Always Available</div>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td style="width: 8em"><span class="key">←</span>&nbsp;<span class="key">→</span></td>
-                                        <td>Move to next/previous image</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">+</span>&nbsp;<span class="key">-</span>&nbsp;<span class="key">=</span></td>
-                                        <td>Zoom in/out/reset</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">↑</span></td>
-                                        <td>Update region label</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">↓</span></td>
-                                        <td>Update region colour</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">Spacebar</span></td>
-                                        <td>Toggle annotation editor (Ctrl to toggle on image editor)</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">Home</span> / <span class="key">h</span></td>
-                                        <td>Jump to first image</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">End</span> / <span class="key">e</span></td>
-                                        <td>Jump to last image</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">PgUp</span> / <span class="key">u</span></td>
-                                        <td>Jump several images</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="key">PgDown</span> / <span class="key">d</span></td>
-                                        <td>Jump several images</td>
-                                    </tr>
+                                <div class="sub_title">항시</div>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 8em"><span class="key">←</span>&nbsp;<span class="key">→</span></td>
+                                            <td>이전/다음 이미지로 이동</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">+</span>&nbsp;<span class="key">-</span>&nbsp;<span class="key">=</span></td>
+                                            <td>줌인/줌아웃 리셋하기</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">Home</span> / <span class="key">h</span></td>
+                                            <td>맨 처음 이미지로</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">End</span> / <span class="key">e</span></td>
+                                            <td>맨 마지막 이미지로</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">PgUp</span> / <span class="key">u</span></td>
+                                            <td>페이지 업</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="key">PgDown</span> / <span class="key">d</span></td>
+                                            <td>페이지 다운</td>
+                                        </tr>
 
-                                    <tr>
-                                        <td><span class="key">Esc</span></td>
-                                        <td>Cancel ongoing task</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        <tr>
+                                            <td><span class="key">Esc</span></td>
+                                            <td>현재 작업중인 단계 취소하기</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -632,40 +623,44 @@
                                 <title>Toggle Annotation Editor</title>
                             </svg> -->
 
-                            <!-- 줌인 -->
-                            <button type="button"  onclick="zoom_in()">
-                                <svg viewBox="0 0 24 24">
-                                    <use xlink:href="#icon_zoomin"></use>
-                                    <title>Zoom In</title>
-                                </svg>
-                            </button>
-                            <!-- 줌아웃 -->
-                            <button type="button" onclick="zoom_out()">
-                                <svg viewBox="0 0 24 24">
-                                    <use xlink:href="#icon_zoomout"></use>
-                                    <title>Zoom Out</title>
-                                </svg>
-                            </button>
-                            <!-- 줌 초기화 -->
-                            <button type="button" onclick="reset_zoom_level()">zoom reset</button>
-                            <!-- 현재 선택된 리전 삭제 -->
-                            <button type="button" onclick="del_sel_regions()" >
-                                <svg viewBox="0 0 24 24">
-                                    <use xlink:href="#icon_close"></use>
-                                    <title>Delete Region</title>
-                                </svg>
-                            </button>
-                            <!-- 창 최대화 -->
-                            <!-- <button type="button" onclick="leftsidebar_toggle()">
-                                <i class="maximize"></i>
-                            </button> -->
-                            <!-- 도움말 -->
-                            <button type="button" onclick="showHelp()" >
-                                <svg viewBox="0 0 24 24">
-                                    <use xlink:href="#icon_insertcomment"></use>
-                                    <title>annotation helps</title>
-                                </svg>
-                            </button>
+                            <div class="left_tool">
+                                <!-- 줌인 -->
+                                <button type="button"  onclick="zoom_in()">
+                                    <svg viewBox="0 0 24 24">
+                                        <use xlink:href="#icon_zoomin"></use>
+                                        <title>Zoom In</title>
+                                    </svg>
+                                </button>
+                                <!-- 줌아웃 -->
+                                <button type="button" onclick="zoom_out()">
+                                    <svg viewBox="0 0 24 24">
+                                        <use xlink:href="#icon_zoomout"></use>
+                                        <title>Zoom Out</title>
+                                    </svg>
+                                </button>
+                                <!-- 줌 초기화 -->
+                                <button type="button" onclick="reset_zoom_level()">zoom reset</button>
+                            </div>
+                            <div class="center_tool">
+                                <!-- 현재 선택된 리전 삭제 -->
+                                <button type="button" onclick="del_sel_regions()" >
+                                    <svg viewBox="0 0 24 24">
+                                        <use xlink:href="#icon_close"></use>
+                                        <title>Delete Region</title>
+                                    </svg>
+                                </button>
+                                <!-- 창 최대화 -->
+                                <!-- <button type="button" onclick="leftsidebar_toggle()">
+                                    <i class="maximize"></i>
+                                </button> -->
+                                <!-- 도움말 -->
+                                <button type="button" onclick="showHelp()" >
+                                    <svg viewBox="0 0 24 24">
+                                        <use xlink:href="#icon_insertcomment"></use>
+                                        <title>annotation helps</title>
+                                    </svg>
+                                </button>
+                            </div>
                             <!-- 이전 이미지 보기 -->
                             <div class="prevNext">
                                 <button type="button" class="bt-next" onclick="move_to_prev_image()">

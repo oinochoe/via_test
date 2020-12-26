@@ -521,7 +521,7 @@ function show_single_image_view() {
 
         var p = document.getElementById('toolbar_image_grid_toggle');
         // p.firstChild.setAttribute('xlink:href', '#icon_gridon');
-        p.childNodes[1].innerHTML = 'Switch to Image Grid View';
+        // p.childNodes[1].innerHTML = 'Switch to Image Grid View';
     }
 }
 
@@ -3924,9 +3924,9 @@ function _via_handle_global_keydown_event(e) {
     if (e.key === ' ') {
         // Space key
         if (e.ctrlKey) {
-            annotation_editor_toggle_on_image_editor();
+            // annotation_editor_toggle_on_image_editor();
         } else {
-            annotation_editor_toggle_all_regions_editor();
+            // annotation_editor_toggle_all_regions_editor();
         }
         e.preventDefault();
         return;
@@ -4634,6 +4634,9 @@ function reset_zoom_level() {
         show_message('Cannot reset zoom because image zoom has not been applied!');
     }
     update_vertical_space();
+
+    zoom_in();
+    zoom_out();
 }
 
 function zoom_in() {
@@ -10266,4 +10269,13 @@ function polygon_to_bbox(pts) {
         }
     }
     return [xmin, ymin, xmax - xmin, ymax - ymin];
+}
+
+
+function showHelp() {
+    var popup = document.querySelector('.custom-popup');
+    popup.style.display = 'block';
+    document.querySelector('.btn_close').addEventListener('click', function() {
+        popup.style.display = 'none';
+    })
 }
