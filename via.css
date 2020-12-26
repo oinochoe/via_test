@@ -10,8 +10,10 @@ textarea{border:1px solid #cccccc;margin:0.6rem 0;padding:0.2rem 0.4rem;}
 /*s:201223추가*/
 .contents-area {width: 100%; box-sizing: border-box; padding:25px;}
 .nav {text-align: right; width: 100%; margin-bottom: 17px;}
+.contents-area .nav {text-align:right; width:100%;}
 .contents-area .nav p {display:inline-block; vertical-align:middle; padding:0 18px; font-size:16px; color:#a7a7a7; font-weight:100; line-height:1; position:relative;}
-.contents-area .nav p:nth-child(1) {width:20px; height:15px; background:url('/static/images/icon_home.png') center no-repeat; font-size:0;}
+.contents-area .nav p:before {content:""; width:8px; height:8px; border:solid #a7a7a7; border-width:1px 1px 0 0; position:absolute; left:-7px; top:calc(50% - 3.5px); -webkit-transform:rotate(45deg) translateY(-50%); -moz-transform:rotate(45deg) translateY(-50%); transform:rotate(45deg) translateY(-50%);}
+.contents-area .nav p:nth-child(1) {width:20px; height:15px; margin-top:-6px; background:url('/static/images/icon_home.png') center no-repeat; font-size:0;}
 .contents-area .nav p:nth-child(1):before {display:none;}
 .contents-area .nav p:last-child {padding-right:0;}
 .page-title{margin-bottom:25px;}
@@ -24,7 +26,8 @@ textarea{border:1px solid #cccccc;margin:0.6rem 0;padding:0.2rem 0.4rem;}
 .btn:hover{color:#fff; border: 1px solid #b60038; background: #b60038;}
 #leftsidebar .box{border:1px solid #e1e1e1; border-radius: 10px; padding:20px; margin-bottom: 10px;}
 #leftsidebar .box h2{font-size:18px; font-weight:400; border-bottom:#d0d0d0 solid 1px; padding-bottom:10px;}
-#leftsidebar .box > button{font-size:18px; font-weight:400; border-bottom:#d0d0d0 solid 1px; padding:0 0 10px 0; background: #fff}
+#leftsidebar .box > button{font-size:18px; font-weight:400; border-bottom:#d0d0d0 solid 1px; padding:0 0 10px 0; background:#fff url('/static/images/icon-plus.png') no-repeat right 30%; }
+#leftsidebar .box > button.active{ background:url('/static/images/icon-minus.png') no-repeat right 35%; }
 /*e:201223추가*/
 
 .top_panel{font-size:0.9rem;display:block;background-color:#212121;color:#ffffff;z-index:1001;margin-bottom:1rem;}
