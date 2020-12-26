@@ -631,26 +631,21 @@
                                 <use xlink:href="#icon_insertcomment"></use>
                                 <title>Toggle Annotation Editor</title>
                             </svg> -->
-                            <!-- 이전 이미지 보기 -->
-                            <svg onclick="move_to_prev_image()" style="margin-left: 1rem" viewBox="0 0 24 24">
-                                <use xlink:href="#icon_prev"></use>
-                                <title>Previous</title>
-                            </svg>
-                            <!-- 다음 이미지 보기 -->
-                            <svg onclick="move_to_next_image()" viewBox="0 0 24 24">
-                                <use xlink:href="#icon_next"></use>
-                                <title>Next</title>
-                            </svg>
+
                             <!-- 줌인 -->
-                            <svg onclick="zoom_in()" style="margin-left: 1rem" viewBox="0 0 24 24">
-                                <use xlink:href="#icon_zoomin"></use>
-                                <title>Zoom In</title>
-                            </svg>
+                            <button type="button"  onclick="zoom_in()">
+                                <svg viewBox="0 0 24 24">
+                                    <use xlink:href="#icon_zoomin"></use>
+                                    <title>Zoom In</title>
+                                </svg>
+                            </button>
                             <!-- 줌아웃 -->
-                            <svg onclick="zoom_out()" viewBox="0 0 24 24">
-                                <use xlink:href="#icon_zoomout"></use>
-                                <title>Zoom Out</title>
-                            </svg>
+                            <button type="button" onclick="zoom_out()">
+                                <svg viewBox="0 0 24 24">
+                                    <use xlink:href="#icon_zoomout"></use>
+                                    <title>Zoom Out</title>
+                                </svg>
+                            </button>
                             <!-- 줌 초기화 -->
                             <button type="button" onclick="reset_zoom_level()">줌 리셋</button>
                             <!-- 현재 선택된 리전 삭제 -->
@@ -662,6 +657,27 @@
                             <button type="button" onclick="leftsidebar_toggle()">
                                 <i class="maximize"><img src="/static/images/pi_via_icon_max.png" alt="최대화"></i>
                             </button>
+                            <!-- 도움말 -->
+                            <svg onclick="annotation_editor_toggle_all_regions_editor()" viewBox="0 0 24 24">
+                                <use xlink:href="#icon_insertcomment"></use>
+                                <title>annotation helps</title>
+                            </svg>
+                            <!-- 이전 이미지 보기 -->
+                            <div class="prevNext">
+                                <button type="button" class="bt-next" onclick="move_to_prev_image()">
+                                    <svg viewBox="0 0 24 24">
+                                        <use xlink:href="#icon_prev"></use>
+                                        <title>Previous</title>
+                                    </svg>
+                                </button>
+                                <!-- 다음 이미지 보기 -->
+                                <button class="bt-prev">
+                                    <svg onclick="move_to_next_image()" viewBox="0 0 24 24">
+                                        <use xlink:href="#icon_next"></use>
+                                        <title>Next</title>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <!-- end of shortcut toolbar -->
                         <input type="file" id="invisible_file_input" name="files[]" style="display: none" accept=".json" />

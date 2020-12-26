@@ -296,10 +296,10 @@ function file_region() {
 // Initialization routine
 //
 function _via_init(event) {
-    _via_basic_demo_load_img();
-    _via_basic_demo_draw_default_regions();
-    _via_basic_demo_define_annotations();
-    _via_basic_demo_define_attributes();
+    // _via_basic_demo_load_img();
+    // _via_basic_demo_draw_default_regions();
+    // _via_basic_demo_define_annotations();
+    // _via_basic_demo_define_attributes();
 
     if (_via_is_debug_mode) {
         document.getElementById('ui_top_panel').innerHTML += '<span>DEBUG MODE</span>';
@@ -5318,15 +5318,22 @@ function show_attribute_options() {
             c1.innerHTML = 'description';
             var c2 = document.createElement('span');
             c2.setAttribute('title', 'The default value of this attribute');
+            c2.setAttribute('style', 'width:30px');
             c2.innerHTML = 'Default';
             var c3 = document.createElement('span');
-            c3.setAttribute('style', 'width:20px');
-            c3.setAttribute('title', '삭제');
-            c3.innerHTML = '삭제';
+            c3.setAttribute('style', 'width:30px');
+            c3.setAttribute('title', 'ok_class');
+            c3.innerHTML = 'ok_class';
+            var c4 = document.createElement('span');
+            c4.setAttribute('style', 'width:25px');
+            c4.setAttribute('title', '삭제');
+            c4.innerHTML = '삭제';
+
             p.appendChild(c0);
             p.appendChild(c1);
             p.appendChild(c2);
             p.appendChild(c3);
+            p.appendChild(c4);
             document.getElementById('attribute_options').appendChild(p);
 
             var options = _via_attributes[_via_attribute_being_updated][attr_id].options;
@@ -5409,8 +5416,11 @@ function attribute_property_add_option(attr_id, option_id, option_desc, option_d
     c2b.setAttribute('onchange', 'attribute_property_on_option_update(this)');
     c2b.setAttribute('id', '_via_attribute_option_default_' + option_id);
 
-    var c3 = document.createElement('i');
-    c3.setAttribute('onclick', 'attribute_property_on_option_delete(this)');
+    var c3 = document.createElement('input');
+    c3.setAttribute('type', 'checkbox');
+
+    var c4 = document.createElement('i');
+    c4.setAttribute('onclick', 'attribute_property_on_option_delete(this)');
 
     c0.appendChild(c0b);
     c1.appendChild(c1b);
@@ -5419,6 +5429,7 @@ function attribute_property_add_option(attr_id, option_id, option_desc, option_d
     p.appendChild(c1);
     p.appendChild(c2);
     p.appendChild(c3);
+    p.appendChild(c4);
 
     document.getElementById('attribute_options').appendChild(p);
 }
@@ -5574,7 +5585,7 @@ function attribute_get_unique_values(attr_type, attr_id) {
 
 
 function attribute_property_on_option_delete($elm) {
-    var $elem = $elm.previousElementSibling.previousElementSibling.previousElementSibling.childNodes[0];
+    var $elem = $elm.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.childNodes[0];
     $elem.vlaue = '';
     $elem.defaultValue = '';
     attribute_property_on_option_update($elem);
