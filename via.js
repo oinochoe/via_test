@@ -380,14 +380,14 @@ function _via_basic_demo_draw_default_regions() {
 
 function _via_basic_demo_define_attributes() {
     var attributes_json =
-        '{"region":{"name":{"type":"text","description":"Name of the object","default_value":"not_defined"},"type":{"type":"dropdown","description":"Category of object","options":{"bird":"Bird","human":"Human","cup":"Cup (object)","unknown":"Unknown (object)"},"default_options":{"unknown":true}},"image_quality":{"type":"checkbox","description":"Quality of image region","options":{"blur":"Blurred region","good_illumination":"Good Illumination","frontal":"Object in Frontal View"},"default_options":{"good":true,"frontal":true,"good_illumination":true}}},"file":{"caption":{"type":"text","description":"","default_value":""},"public_domain":{"type":"radio","description":"","options":{"yes":"Yes","no":"No"},"default_options":{"no":true}},"image_url":{"type":"text","description":"","default_value":""}}}';
+        '{"region":{"name":{"type":"dropdown","description":"Category of object","options":{"bird":"Bird","human":"Human","cup":"Cup (object)","unknown":"Unknown (object)"},"default_options":{"unknown":true}}}}';
 
     project_import_attributes_from_json(attributes_json);
 }
 
 function _via_basic_demo_define_annotations() {
     var annotations_json =
-        '{"adutta_swan.jpg-1":{"filename":"adutta_swan.jpg","size":-1,"regions":[{"shape_attributes":{"name":"polygon","all_points_x":[116,94,176,343,383,385,369,406,398,364,310,297,304,244,158],"all_points_y":[157,195,264,273,261,234,222,216,155,124,135,170,188,170,175]},"region_attributes":{"name":"Swan","type":"bird","image_quality":{"good_illumination":true}}}],"file_attributes":{"caption":"Swan in lake Geneve","public_domain":"no","image_url":"http://www.robots.ox.ac.uk/~vgg/software/via/images/swan.jpg"}},"wikimedia_death_of_socrates.jpg-1":{"filename":"wikimedia_death_of_socrates.jpg","size":-1,"regions":[{"shape_attributes":{"name":"rect","x":174,"y":139,"width":108,"height":227},"region_attributes":{"name":"Plato","type":"human","image_quality":{"good_illumination":true}}},{"shape_attributes":{"name":"rect","x":347,"y":114,"width":91,"height":209},"region_attributes":{"name":"Socrates","type":"human","image_quality":{"frontal":true,"good_illumination":true}}},{"shape_attributes":{"name":"ellipse","cx":316,"cy":180,"rx":17,"ry":12},"region_attributes":{"name":"Hemlock","type":"cup"}}],"file_attributes":{"caption":"The Death of Socrates by David","public_domain":"yes","image_url":"https://en.wikipedia.org/wiki/The_Death_of_Socrates#/media/File:David_-_The_Death_of_Socrates.jpg"}}}';
+        '{"adutta_swan.jpg-1":{"filename":"adutta_swan.jpg","size":-1,"regions":[{"shape_attributes":{"name":"polygon","all_points_x":[116,94,176,343,383,385,369,406,398,364,310,297,304,244,158],"all_points_y":[157,195,264,273,261,234,222,216,155,124,135,170,188,170,175]},"region_attributes":{"name":"Swan","type":"bird"}}],"file_attributes":{"caption":"Swan in lake Geneve","public_domain":"no","image_url":"http://www.robots.ox.ac.uk/~vgg/software/via/images/swan.jpg"}},"wikimedia_death_of_socrates.jpg-1":{"filename":"wikimedia_death_of_socrates.jpg","size":-1,"regions":[{"shape_attributes":{"name":"rect","x":174,"y":139,"width":108,"height":227},"region_attributes":{"name":"Plato","type":"human","image_quality":{"good_illumination":true}}},{"shape_attributes":{"name":"rect","x":347,"y":114,"width":91,"height":209},"region_attributes":{"name":"Socrates","type":"human","image_quality":{"frontal":true,"good_illumination":true}}},{"shape_attributes":{"name":"ellipse","cx":316,"cy":180,"rx":17,"ry":12},"region_attributes":{"name":"Hemlock","type":"cup"}}],"file_attributes":{"caption":"The Death of Socrates by David","public_domain":"yes","image_url":"https://en.wikipedia.org/wiki/The_Death_of_Socrates#/media/File:David_-_The_Death_of_Socrates.jpg"}}}';
 
     import_annotations_from_json(annotations_json);
 }
@@ -5222,7 +5222,7 @@ function show_attribute_properties() {
 
     if (attr_input_type === 'text') {
         var attr_default_value = _via_attributes[attr_type][attr_id].default_value;
-        attribute_property_add_input_property('Default value of this attribute', 'Def.', attr_default_value, 'attribute_default_value');
+        attribute_property_add_input_property('Default value of this attribute', '초깃값', attr_default_value, 'attribute_default_value');
     }
 
     // add dropdown for type of attribute
@@ -5274,7 +5274,7 @@ function show_attribute_options() {
             var c0 = document.createElement('span');
             c0.setAttribute('style', 'width:25%');
             c0.setAttribute('title', 'When selected, this is the value that appears in exported annotations');
-            c0.innerHTML = 'id';
+            c0.innerHTML = '클래스명';
             var c1 = document.createElement('span');
             c1.setAttribute('style', 'width:60%');
             c1.setAttribute(
@@ -5284,7 +5284,7 @@ function show_attribute_options() {
             c1.innerHTML = 'image url or b64';
             var c2 = document.createElement('span');
             c2.setAttribute('title', 'The default value of this attribute');
-            c2.innerHTML = 'def.';
+            c2.innerHTML = '초깃값';
             p.appendChild(c0);
             p.appendChild(c1);
             p.appendChild(c2);
@@ -5309,14 +5309,14 @@ function show_attribute_options() {
             var c0 = document.createElement('span');
             c0.setAttribute('style', 'width:25%');
             c0.setAttribute('title', 'When selected, this is the value that appears in exported annotations');
-            c0.innerHTML = 'id';
+            c0.innerHTML = '클래스명';
             var c1 = document.createElement('span');
             c1.setAttribute('style', 'width:60%');
             c1.setAttribute('title', 'This is the text shown as an option to the annotator');
             c1.innerHTML = 'description';
             var c2 = document.createElement('span');
             c2.setAttribute('title', 'The default value of this attribute');
-            c2.innerHTML = 'def.';
+            c2.innerHTML = '초깃값';
             p.appendChild(c0);
             p.appendChild(c1);
             p.appendChild(c2);
@@ -5419,7 +5419,7 @@ function attribute_property_add_new_entry_option(attr_id, attribute_type) {
     c0b.setAttribute('type', 'text');
     c0b.setAttribute('onchange', 'attribute_property_on_option_add(this)');
     c0b.setAttribute('id', '_via_attribute_new_option_id');
-    c0b.setAttribute('placeholder', 'Add new option id');
+    c0b.setAttribute('placeholder', '클래스 추가하기');
     p.appendChild(c0b);
     document.getElementById('attribute_options').appendChild(p);
 }
@@ -6199,8 +6199,14 @@ function annotation_editor_show() {
             // add annotation editor to image_panel
             if (_via_settings.ui.image.on_image_annotation_editor_placement === VIA_ANNOTATION_EDITOR_PLACEMENT.NEAR_REGION) {
                 var html_position = annotation_editor_get_placement(_via_user_sel_region_id);
+                var delta = 0;
+                if (_via_img_wrap.getBoundingClientRect().width < _via_img_panel.getBoundingClientRect().width) {
+                    delta = '50%';
+                } else {
+                    delta = html_position.left.split('px')[0] - (_via_img_panel.getBoundingClientRect().width / 2) + 'px';
+                }
                 ae.style.top = html_position.top;
-                ae.style.left = html_position.left;
+                ae.style.left = delta;
             }
             _via_display_area.appendChild(ae);
             annotation_editor_update_content();
