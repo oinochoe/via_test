@@ -5317,9 +5317,14 @@ function show_attribute_options() {
             var c2 = document.createElement('span');
             c2.setAttribute('title', 'The default value of this attribute');
             c2.innerHTML = 'Default';
+            var c3 = document.createElement('span');
+            c3.setAttribute('style', 'width:20px');
+            c3.setAttribute('title', '삭제');
+            c3.innerHTML = '삭제';
             p.appendChild(c0);
             p.appendChild(c1);
             p.appendChild(c2);
+            p.appendChild(c3);
             document.getElementById('attribute_options').appendChild(p);
 
             var options = _via_attributes[_via_attribute_being_updated][attr_id].options;
@@ -5402,12 +5407,16 @@ function attribute_property_add_option(attr_id, option_id, option_desc, option_d
     c2b.setAttribute('onchange', 'attribute_property_on_option_update(this)');
     c2b.setAttribute('id', '_via_attribute_option_default_' + option_id);
 
+    var c3 = document.createElement('i');
+    c3.setAttribute('onclick', 'attribute_property_on_option_delete(this)');
+
     c0.appendChild(c0b);
     c1.appendChild(c1b);
     c2.appendChild(c2b);
     p.appendChild(c0);
     p.appendChild(c1);
     p.appendChild(c2);
+    p.appendChild(c3);
 
     document.getElementById('attribute_options').appendChild(p);
 }
@@ -5559,6 +5568,14 @@ function attribute_get_unique_values(attr_type, attr_id) {
             break;
     }
     return values;
+}
+
+
+function attribute_property_on_option_delete($elm) {
+    var $elem = $elm.previousElementSibling.previousElementSibling.previousElementSibling.childNodes[0];
+    $elem.vlaue = '';
+    $elem.defaultValue = '';
+    attribute_property_on_option_update($elem);
 }
 
 function attribute_property_on_option_update(p) {
@@ -5828,15 +5845,16 @@ function get_current_attribute_id() {
     return document.getElementById('attributes_name_list').value;
 }
 
+
 function update_attribute_option_id_with_confirm(attr_type, attr_id, option_id, new_option_id) {
     var is_delete = false;
     var config;
     if (new_option_id === '' || typeof new_option_id === 'undefined') {
         // an empty new_option_id indicates deletion of option_id
-        config = { title: 'Delete an option for ' + attr_type + ' attribute' };
+        config = { title: '클래스 이름 삭제하기'};
         is_delete = true;
     } else {
-        config = { title: 'Rename an option for ' + attr_type + ' attribute' };
+        config = { title: '클래스 이름 변경하기'};
     }
 
     var input = {
@@ -5847,8 +5865,8 @@ function update_attribute_option_id_with_confirm(attr_type, attr_id, option_id, 
     if (is_delete) {
         input['option_id'] = { type: 'text', name: 'Attribute Option', value: option_id, disabled: true };
     } else {
-        (input['option_id'] = { type: 'text', name: 'Attribute Option (old)', value: option_id, disabled: true }),
-            (input['new_option_id'] = { type: 'text', name: 'Attribute Option (new)', value: new_option_id, disabled: true });
+        (input['option_id'] = { type: 'text', name: '변경 이전', value: option_id, disabled: true }),
+            (input['new_option_id'] = { type: 'text', name: '변경 후', value: new_option_id, disabled: true });
     }
 
     invoke_with_user_inputs(update_attribute_option_id_confirmed, input, config, update_attribute_option_id_cancel);
